@@ -1,0 +1,9 @@
+**/target/
+.idea
+*.iml
+#忽略所有.iml文件
+*.class
+#忽略所有.iml文件
+*Test.java
+#忽略所有已Test结尾的java文件
+**/test/
