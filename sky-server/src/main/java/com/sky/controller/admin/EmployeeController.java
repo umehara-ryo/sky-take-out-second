@@ -4,6 +4,7 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.PageResult;
@@ -90,6 +91,42 @@ public class EmployeeController {
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
 
         return  Result.success(pageResult);
+    }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("スイッチオンオフ")
+    public Result switchOnOff(@PathVariable Integer status,Long id){
+        log.info("スイッチオンオフ{},{}",status,id);
+
+        employeeService.switchOnOff(status,id);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("idで調べる")
+    public Result<Employee> getById(@PathVariable Long id){
+        log.info("idで調べる");
+        Employee employee = employeeService.getById(id);
+
+        return Result.success(employee);
+    }
+
+    @PutMapping
+    @ApiOperation("従業員情報更新")
+    public Result update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("従業員情報更新");
+       employeeService.update(employeeDTO);
+
+        return Result.success();
+    }
+
+    @PutMapping("editPassword")
+    @ApiOperation("パスワード変更")
+    public Result editPassword(@RequestBody PasswordEditDTO passwordEditDTO){
+        log.info("パスワード変更");
+        employeeService.editPassword(passwordEditDTO);
+
+        return Result.success();
     }
 
 

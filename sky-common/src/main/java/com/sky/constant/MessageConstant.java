@@ -6,7 +6,7 @@ package com.sky.constant;
 public class MessageConstant {
 
     public static final String ALREADY_EXISTS_ERROR = "既に存在します";
-    public static final String PASSWORD_ERROR = "アカウントが正しくありません";
+    public static final String PASSWORD_ERROR = "パスワードが正しくありません";
     public static final String ACCOUNT_NOT_FOUND = "アカウントが存在しません";
     public static final String ACCOUNT_LOCKED = "アカウントがロックされています";
     public static final String UNKNOWN_ERROR = "不明なエラー";

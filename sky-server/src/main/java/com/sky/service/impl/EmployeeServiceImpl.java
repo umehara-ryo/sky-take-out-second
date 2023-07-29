@@ -9,6 +9,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
@@ -128,6 +129,64 @@ public class EmployeeServiceImpl implements EmployeeService {
         return pageResult;
     }
 
+    @Override
+    public void switchOnOff(Integer status,Long id) {
+
+        Employee employee = Employee.builder()
+                .status(status).id(id)
+                .updateUser(BaseContext.getCurrentId())
+                .updateTime(LocalDateTime.now())
+                .build();
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        return employee;
+    }
+
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+
+        //1.empオブジェクトに値を代入
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+
+        //2.更新時刻と更新者を代入
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        //3．情報を更新する
+        employeeMapper.update(employee);
+
+
+    }
+
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+
+        //0.スレッドからidをとりだす
+        Long empId = BaseContext.getCurrentId();
+
+        //1.旧パスワードの暗号化と比較
+        Employee employee = employeeMapper.selectById(empId);
+
+        String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
+        if(!oldPassword.equals(employee.getPassword())){
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        //2.ニューパスを暗号化
+        String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
+
+        //3.empオブジェクトを作成し、値代入、更新時刻と更新者を代入
+        employee.setPassword(newPassword);
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateTime(LocalDateTime.now());
+        //4.変更
+        employeeMapper.update(employee);
+    }
 
 
 }
