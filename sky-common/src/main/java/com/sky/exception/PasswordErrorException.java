@@ -1,15 +1,17 @@
 package com.sky.exception;
 
-/**
- * 密码错误异常
- */
+//passwordが違う時の例外
+
 public class PasswordErrorException extends BaseException {
 
-    public PasswordErrorException() {
-    }
+
+    public PasswordErrorException(){}
 
     public PasswordErrorException(String msg) {
+
         super(msg);
+
     }
+
 
 }

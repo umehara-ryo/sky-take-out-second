@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
+@Data//getter,setter,toString,equals
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "员工登录返回的数据格式")
+@ApiModel(description = "従業員ログインする時戻るデータフォーマット")
 public class EmployeeLoginVO implements Serializable {
 
     @ApiModelProperty("主键值")

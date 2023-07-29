@@ -1,6 +1,7 @@
 package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.context.BaseContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -11,6 +12,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * jwt令牌校验的拦截器
@@ -39,13 +42,17 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
 
         //1、从请求头中获取令牌
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        String token = request.getHeader(jwtProperties.getAdminTokenName());//リクエストヘッダー名による
 
         //2、校验令牌
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
+            //TODO 这一步也许是关键
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
+            //empId　を　localThreadに保持する
+            BaseContext.setCurrentId(empId);
+
             log.info("当前员工id：", empId);
             //3、通过，放行
             return true;
