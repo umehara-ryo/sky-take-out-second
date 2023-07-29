@@ -87,7 +87,7 @@ public class EmployeeController {
     @ApiOperation("ページ別でクエリ")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO){
         log.info("ページ別でクエリ,{}",employeePageQueryDTO);
-        PageResult pageResult = employeeService.page(employeePageQueryDTO);
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
 
         return  Result.success(pageResult);
     }

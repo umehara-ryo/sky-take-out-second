@@ -112,12 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public PageResult page(EmployeePageQueryDTO employeePageQueryDTO) {
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
         //1.启动pagehelper
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
 
         //2.查询表返回Page(List)集合
-        Page<Employee> page = employeeMapper.selectAll();
+        Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
 
         //3、封装pageResult
         long total = page.getTotal();
