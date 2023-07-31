@@ -99,11 +99,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Long currentId = BaseContext.getCurrentId();
 
-        employee.setCreateUser(currentId);
-        employee.setUpdateUser(currentId);
-
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateUser(currentId);
+//        employee.setUpdateUser(currentId);
+//
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
 
         //5.动态sql插入数据,并开启主键返回
@@ -154,8 +154,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         BeanUtils.copyProperties(employeeDTO,employee);
 
         //2.更新時刻と更新者を代入
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
 
         //3．情報を更新する
         employeeMapper.update(employee);
@@ -182,8 +182,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //3.empオブジェクトを作成し、値代入、更新時刻と更新者を代入
         employee.setPassword(newPassword);
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
         //4.変更
         employeeMapper.update(employee);
     }

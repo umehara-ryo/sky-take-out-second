@@ -51,10 +51,10 @@ public class CategoryServiceImpl implements CategoryService {
         //3.カテゴリーオブジェクトを作成し、ステータスをオフにセット
         //4．更新時間や作成時間など
         category = Category.builder().status(StatusConstant.DISABLE)
-                .createTime(LocalDateTime.now())
-                .createUser(BaseContext.getCurrentId())
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
+//                .createTime(LocalDateTime.now())
+//                .createUser(BaseContext.getCurrentId())
+//                .updateTime(LocalDateTime.now())
+//                .updateUser(BaseContext.getCurrentId())
                 .build();
         BeanUtils.copyProperties(categoryDTO, category);
 
@@ -85,8 +85,8 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(categoryDTO, category);
 
         //2.更新情報をセット,ステータスをオフに
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setUpdateTime(LocalDateTime.now());
+//        category.setUpdateUser(BaseContext.getCurrentId());
         category.setStatus(StatusConstant.DISABLE);
 
         //3.マッパーを呼び出し
