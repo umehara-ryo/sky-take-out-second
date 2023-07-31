@@ -6,10 +6,27 @@
         insert into dish (name, category_id, price, image, description,
                           status, create_time, update_time,
                           create_user, update_user)
-        values (#{name},#{categoryId},#{price},#{image},#{description},
-                #{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
-        </insert>
+        values (#{name}, #{categoryId}, #{price}, #{image}, #{description},
+                #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
     <select id="getByCategoryId" resultType="com.sky.entity.Dish">
-        select * from dish where category_id = #{categoryId}
+        select *
+        from dish
+        where category_id = #{categoryId}
+    </select>
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+        select  dish.*,c.name category_name  from dish join category c on c.id = dish.category_id
+        <where>
+            <if test="name != null">
+                and dish.name = #{name}
+            </if>
+            <if test="categoryId != null">
+                and dish.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and dish.status = #{status}
+            </if>
+        </where>
+        order by create_time
     </select>
 </mapper>

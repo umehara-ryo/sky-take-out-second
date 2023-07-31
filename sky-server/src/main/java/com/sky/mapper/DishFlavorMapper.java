@@ -12,4 +12,6 @@ public interface DishFlavorMapper {
 
 
     void save(List<DishFlavor> flavors);
+
+    List<DishFlavor> selectByDishId(Long DishId);
 }
