@@ -37,3 +37,11 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    bucket-name: web-umehara
+    access-key-id: LTAI5tPoF3e8wiBRYMVMTusn
+    access-key-secret: txQQQZ7YzIRmAqRTnEoNjpgWZSfmfF
+
