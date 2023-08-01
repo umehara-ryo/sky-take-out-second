@@ -74,4 +74,16 @@ public class DishServiceImpl implements DishService {
 
         return new PageResult(total,list);
     }
+
+    @Override
+    public DishVO getById(Long id) {
+        DishVO dishVO = dishMapper.getById(id);
+
+        return dishVO;
+    }
+
+    @Override
+    public void onOff(Integer status, Long id) {
+        dishMapper.setStatusById(status,id);
+    }
 }

@@ -19,4 +19,8 @@ public interface DishMapper {
     void save(Dish dish);
 
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    DishVO getById(Long id);
+
+    void setStatusById(Integer status, Long id);
 }
