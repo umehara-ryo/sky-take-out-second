@@ -60,6 +60,25 @@ public class DishController {
         return Result.success();
     }
 
+    @PutMapping
+    @ApiOperation("料理の情報変更")
+    public Result update(@RequestBody DishDTO dishDTO){
+        log.info("料理の情報変更{}",dishDTO);
+        dishService.update(dishDTO);
+
+        return Result.success();
+    }
+
+    @DeleteMapping
+    @ApiOperation("料理の情報削除")
+    public Result delete(@RequestParam("ids") List<Long> ids){
+        log.info("料理の情報削除{}",ids);
+        dishService.delete(ids);
+
+        return Result.success();
+    }
+
+
 
 
 

@@ -23,4 +23,9 @@ public interface DishMapper {
     DishVO getById(Long id);
 
     void setStatusById(Integer status, Long id);
+
+    @AutoFill(OperationType.UPDATE)
+    void update(Dish dish);
+
+    void deleteBatch(List<Long> ids);
 }

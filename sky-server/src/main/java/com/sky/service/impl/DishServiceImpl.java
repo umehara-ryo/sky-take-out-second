@@ -2,10 +2,13 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.result.PageResult;
@@ -41,12 +44,13 @@ public class DishServiceImpl implements DishService {
         dishMapper.save(dish);
 
         //4.主キー戻りでdishIdをゲット、そして挿入
-        if (flavors != null && flavors.size() > 0)
+        if (flavors != null && flavors.size() > 0) {
             for (DishFlavor flavor : flavors) {
                 flavor.setDishId(dish.getId());
             }
 
-        dishFlavorMapper.save(flavors);
+            dishFlavorMapper.save(flavors);
+        }
 
 
         //5．mapperにアノテーションを付ける
@@ -57,33 +61,90 @@ public class DishServiceImpl implements DishService {
     @Override
     public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
         //1.pageHelperを起動し
-        PageHelper.startPage(dishPageQueryDTO.getPage(),dishPageQueryDTO.getPageSize());
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
 
         //2.pageを獲得
-       Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
+        Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
         long total = page.getTotal();
         List<DishVO> list = page.getResult();
 
-        //3.flavorsを獲得、listにセット
+        //3.flavorsを獲得、dishVOにセット
         for (DishVO dishVO : list) {
-           List<DishFlavor> flavors =  dishFlavorMapper.selectByDishId(dishVO.getId());
-           dishVO.setFlavors(flavors);
+            List<DishFlavor> flavors = dishFlavorMapper.selectByDishId(dishVO.getId());
+            dishVO.setFlavors(flavors);
         }
 
-
-
-        return new PageResult(total,list);
+        //4.返す
+        return new PageResult(total, list);
     }
 
     @Override
     public DishVO getById(Long id) {
         DishVO dishVO = dishMapper.getById(id);
 
+
+        //3.flavorsを獲得、dishVOにセット
+            List<DishFlavor> flavors = dishFlavorMapper.selectByDishId(dishVO.getId());
+            dishVO.setFlavors(flavors);
+
+
         return dishVO;
     }
 
     @Override
     public void onOff(Integer status, Long id) {
-        dishMapper.setStatusById(status,id);
+        dishMapper.setStatusById(status, id);
+    }
+
+    @Override
+    @Transactional
+    public void update(DishDTO dishDTO) {
+
+        //1.dishオブジェクトを作成、dish表をupdateする
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.update(dish);
+
+        //2.dishIdを取り出し、dishIdでdish_flavor表から抹消する
+        Long dishId = dishDTO.getId();
+        dishFlavorMapper.deleteByDishId(dishId);
+
+        //3.flavorsを取り出し、dish_flavor表に挿入
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && flavors.size() > 0) {
+            for (DishFlavor flavor : flavors) {
+                flavor.setDishId(dishId);
+            }
+            dishFlavorMapper.save(flavors);
+        }
+
+        //4.AutoFillアノテーションを付ける
+
+    }
+
+    @Override
+    @Transactional
+    public void delete(List<Long> ids) {
+
+        //1.販売状態を判明、オンの場合は削除できない
+        for (Long id : ids) {
+            DishVO dishVO = dishMapper.getById(id);
+            if (dishVO.getStatus() == StatusConstant.ENABLE) {
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
+        }
+
+        //1.idでdish表から削除
+        dishMapper.deleteBatch(ids);
+
+
+        //2.dishIdでdishflavor表から削除
+        for (Long id : ids) {
+            dishFlavorMapper.deleteByDishId(id);
+        }
+
+
+        //3.トランザクションをオンに
+
     }
 }
