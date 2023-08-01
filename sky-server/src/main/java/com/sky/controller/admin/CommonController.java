@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.config.AliOssConfiguration;
 import com.sky.properties.AliOssProperties;
 import com.sky.result.Result;
 import com.sky.utils.AliOssUtil;
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class CommonController {
     @Autowired
-    private AliOssProperties aliOssProperties;
+    private AliOssUtil aliOssUtil;
 
     @PostMapping("/upload")
     @ApiOperation("ファイルアップロード")
@@ -44,11 +45,11 @@ public class CommonController {
         String newName = uuid + format;
 
         //4.ossでurlをゲット
-        AliOssUtil aliOssUtil = new AliOssUtil();
-        aliOssUtil.setAccessKeyId(aliOssProperties.getAccessKeyId());
-        aliOssUtil.setAccessKeySecret(aliOssProperties.getAccessKeySecret());
-        aliOssUtil.setEndpoint(aliOssProperties.getEndpoint());
-        aliOssUtil.setBucketName(aliOssProperties.getBucketName());
+//        AliOssUtil aliOssUtil = new AliOssUtil();
+//        aliOssUtil.setAccessKeyId(aliOssProperties.getAccessKeyId());
+//        aliOssUtil.setAccessKeySecret(aliOssProperties.getAccessKeySecret());
+//        aliOssUtil.setEndpoint(aliOssProperties.getEndpoint());
+//        aliOssUtil.setBucketName(aliOssProperties.getBucketName());
 
         String url = aliOssUtil.upload(fileBytes, newName);
         //5.返す
