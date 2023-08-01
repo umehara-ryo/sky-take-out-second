@@ -51,6 +51,7 @@ public class CommonController {
 //        aliOssUtil.setEndpoint(aliOssProperties.getEndpoint());
 //        aliOssUtil.setBucketName(aliOssProperties.getBucketName());
 
+
         String url = aliOssUtil.upload(fileBytes, newName);
         //5.返す
 
