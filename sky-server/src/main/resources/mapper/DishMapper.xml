@@ -61,7 +61,7 @@
         select dish.*,c.name category_name from dish join category c on c.id = dish.category_id
         <where>
             <if test="name != null">
-                and dish.name = #{name}
+                and dish.name like ('%',#{name},'%')
             </if>
             <if test="categoryId != null">
                 and dish.category_id = #{categoryId}
