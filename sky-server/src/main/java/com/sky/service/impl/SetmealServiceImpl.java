@@ -8,6 +8,7 @@ import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -114,7 +115,7 @@ public class SetmealServiceImpl implements SetmealService {
     public void update(SetmealDTO setmealDTO) {
         //1.setmeal表を更新する
         Setmeal setmeal = new Setmeal();
-        BeanUtils.copyProperties(setmealDTO,setmeal);
+        BeanUtils.copyProperties(setmealDTO, setmeal);
         setmeal.setStatus(StatusConstant.DISABLE);
         //更新した定食は未販売となる
         setmealMapper.update(setmeal);
@@ -123,11 +124,41 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDishMapper.deleteBySetmealId(setmealDTO.getId());
 
         //3.setmealDishにsetmealIdをセットする、seatmeal_dishに挿入する
+
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
-        setmealDishMapper.saveBatch(setmealDishes);
+        if (setmealDishes != null && setmealDishes.size() > 0) {
+            //実は要らない、丈夫さを高めるだけ
+            for (SetmealDish setmealDish : setmealDishes) {
+                setmealDish.setSetmealId(setmealDTO.getId());
+            }
+
+            setmealDishMapper.saveBatch(setmealDishes);
+        }
 
 
         //4.トランザクションをオンにする
         //5.マッパーにupdate
+    }
+
+    @Override
+    @Transactional
+    public void delete(List<Long> ids) {
+        //1.販売状態を判明
+        for (Long id : ids) {
+            SetmealVO setmealVO = setmealMapper.getById(id);
+            if(setmealVO.getStatus().equals(StatusConstant.ENABLE)){
+                throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+            }
+        }
+        //2.setmeal表から削除
+        setmealMapper.delete(ids);
+
+        //3.setmealDish表から削除
+        for (Long setmealId : ids) {
+            setmealDishMapper.deleteBySetmealId(setmealId);
+        }
+
+
+        //4.トランザクションをオンにする
     }
 }

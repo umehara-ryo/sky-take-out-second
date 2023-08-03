@@ -126,6 +126,8 @@ public class DishServiceImpl implements DishService {
     @Transactional
     public void delete(List<Long> ids) {
 
+        //todo 関連づけられる定食が存在すれば削除できません
+
         //1.販売状態を判明、オンの場合は削除できない
         for (Long id : ids) {
             DishVO dishVO = dishMapper.getById(id);

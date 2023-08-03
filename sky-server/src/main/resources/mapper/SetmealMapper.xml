@@ -17,34 +17,42 @@
     </update>
     <update id="update">
         update setmeal
-       <set>
-           <if test="categoryId != null">
-               category_id = #{categoryId},
-           </if>
-           <if test="name != null">
-               name = #{name},
-           </if>
-           <if test="price != null">
-               price = #{price},
-           </if>
-           <if test="status != null">
-               status = #{status},
-           </if>
-           <if test="description != null">
-               description = #{description},
-           </if>
-           <if test="image != null">
-               image = #{image},
-           </if>
-           <if test="updateTime != null">
-               update_time = #{updateTime},
-           </if>
-           <if test="updateUser != null">
-               update_user = #{updateUser},
-           </if>
-       </set>
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
         where id = #{id}
     </update>
+    <delete id="delete">
+        delete
+        from setmeal
+        where id in
+        <foreach collection="ids" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
     <select id="getByCategoryId" resultType="com.sky.entity.Setmeal">
         select *
         from setmeal
@@ -66,8 +74,9 @@
         order by update_time desc
     </select>
     <select id="getById" resultType="com.sky.vo.SetmealVO">
-        select s.*,c.name category_name
-        from setmeal s join category c on c.id = s.category_id
+        select s.*, c.name category_name
+        from setmeal s
+                 join category c on c.id = s.category_id
         where s.id = #{id}
     </select>
 </mapper>
