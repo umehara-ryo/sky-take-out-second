@@ -10,6 +10,11 @@
              #{setmealDish.name},#{setmealDish.price},#{setmealDish.copies})
         </foreach>
     </insert>
+    <delete id="deleteBySetmealId">
+        delete
+        from setmeal_dish
+        where setmeal_id = #{setmealId}
+    </delete>
     <select id="getBySetmealID" resultType="com.sky.entity.SetmealDish">
         select * from setmeal_dish where setmeal_id = #{setmealId}
     </select>

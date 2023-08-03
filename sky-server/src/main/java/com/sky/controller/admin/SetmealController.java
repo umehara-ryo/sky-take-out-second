@@ -57,6 +57,16 @@ public class SetmealController {
         return Result.success();
     }
 
+    @PutMapping
+    @ApiOperation("定食情報更新")
+    public Result update(@RequestBody SetmealDTO setmealDTO){
+        log.info("販売状態の調整{}",setmealDTO);
+        setmealService.update(setmealDTO);
+
+        return Result.success();
+
+    }
+
 
 
 

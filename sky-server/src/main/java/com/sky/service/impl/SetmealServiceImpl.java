@@ -108,4 +108,26 @@ public class SetmealServiceImpl implements SetmealService {
         }
         setmealMapper.updateStatusById(status, id);
     }
+
+    @Override
+    @Transactional
+    public void update(SetmealDTO setmealDTO) {
+        //1.setmeal表を更新する
+        Setmeal setmeal = new Setmeal();
+        BeanUtils.copyProperties(setmealDTO,setmeal);
+        setmeal.setStatus(StatusConstant.DISABLE);
+        //更新した定食は未販売となる
+        setmealMapper.update(setmeal);
+
+        //2.setmealIdでseatmeal_dishから削除
+        setmealDishMapper.deleteBySetmealId(setmealDTO.getId());
+
+        //3.setmealDishにsetmealIdをセットする、seatmeal_dishに挿入する
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
+        setmealDishMapper.saveBatch(setmealDishes);
+
+
+        //4.トランザクションをオンにする
+        //5.マッパーにupdate
+    }
 }
