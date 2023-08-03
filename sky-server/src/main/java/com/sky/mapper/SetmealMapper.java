@@ -23,4 +23,7 @@ public interface SetmealMapper {
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
     SetmealVO getById(Long id);
+
+
+    void updateStatusById(Integer status, Long id);
 }

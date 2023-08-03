@@ -10,6 +10,11 @@
                 #{status}, #{description}, #{image},
                 #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
+    <update id="updateStatusById">
+        update setmeal
+        set status = #{status}
+        where id = #{id}
+    </update>
     <select id="getByCategoryId" resultType="com.sky.entity.Setmeal">
         select *
         from setmeal

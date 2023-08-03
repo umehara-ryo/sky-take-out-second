@@ -84,4 +84,9 @@ public class SetmealServiceImpl implements SetmealService {
 
         return setmealVO;
     }
+
+    @Override
+    public void switchOnOff(Integer status,Long id) {
+        setmealMapper.updateStatusById(status,id);
+    }
 }

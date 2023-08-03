@@ -48,6 +48,17 @@ public class SetmealController {
         return Result.success(setmealVO);
     }
 
+    @PostMapping("/status/{status}")
+    @ApiOperation("販売状態の調整")
+    public Result switchOnOFF(@PathVariable Integer status, Long id){
+        log.info("販売状態の調整{}{}",status,id);
+        setmealService.switchOnOff(status,id);
+
+        return Result.success();
+    }
+
+
+
 
 
 }
