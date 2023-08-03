@@ -7,7 +7,7 @@
         values
         <foreach collection="setmealDishes" item="setmealDish" separator=",">
             (#{setmealDish.setmealId},#{setmealDish.dishId},
-             #{setmealDish.name},#{setmealDish.price},#{setmealDish.copies})
+            #{setmealDish.name},#{setmealDish.price},#{setmealDish.copies})
         </foreach>
     </insert>
     <delete id="deleteBySetmealId">
@@ -16,6 +16,14 @@
         where setmeal_id = #{setmealId}
     </delete>
     <select id="getBySetmealID" resultType="com.sky.entity.SetmealDish">
-        select * from setmeal_dish where setmeal_id = #{setmealId}
+        select *
+        from setmeal_dish
+        where setmeal_id = #{setmealId}
+    </select>
+    <select id="getByDishIds" resultType="com.sky.entity.SetmealDish">
+        select * from setmeal_dish where dish_id in
+        <foreach collection="dishIds" item="dishId" open="(" close=")" separator=",">
+            #{dishId}
+        </foreach>
     </select>
 </mapper>

@@ -8,9 +8,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -29,6 +32,9 @@ public class DishServiceImpl implements DishService {
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
+
 
     @Override
     @Transactional
@@ -126,7 +132,7 @@ public class DishServiceImpl implements DishService {
     @Transactional
     public void delete(List<Long> ids) {
 
-        //todo 関連づけられる定食が存在すれば削除できません
+
 
         //1.販売状態を判明、オンの場合は削除できない
         for (Long id : ids) {
@@ -135,18 +141,23 @@ public class DishServiceImpl implements DishService {
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }
         }
+        //2.関連づけられる定食が存在すれば削除できません
+        List<SetmealDish> setmealDishes = setmealDishMapper.getByDishIds(ids);
+        if(setmealDishes == null || setmealDishes.size() > 0){
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
 
-        //1.idでdish表から削除
+        //3.idでdish表から削除
         dishMapper.deleteBatch(ids);
 
 
-        //2.dishIdでdishflavor表から削除
+        //4.dishIdでdishflavor表から削除
         for (Long id : ids) {
             dishFlavorMapper.deleteByDishId(id);
         }
 
 
-        //3.トランザクションをオンに
+        //5.トランザクションをオンに
 
     }
 
