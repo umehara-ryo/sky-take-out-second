@@ -60,12 +60,28 @@ public class SetmealServiceImpl implements SetmealService {
         //2.setmeal表とcategory表とともに調べる、categoryNameというエイリアス名を設定
 
 
-        Page<Setmeal> page = setmealMapper.pageQuery(setmealPageQueryDTO);
+        Page<SetmealVO> page = setmealMapper.pageQuery(setmealPageQueryDTO);
 
         //3.pageResultにカプセル化する
         long total = page.getTotal();
-        List<Setmeal> result = page.getResult();
+        List<SetmealVO> result = page.getResult();
 
         return new PageResult(total,result);
+    }
+
+    @Override
+    public SetmealVO getById(Long id) {
+        //1.setmeal表からsetmealを取り出し
+        SetmealVO setmealVO = setmealMapper.getById(id);
+
+        //2.setmealDish表からsetmealDishesを取り出し
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealID(id);
+
+
+        //3.setmealDishesをsetmealVOにセットする
+        setmealVO.setSetmealDishes(setmealDishes);
+
+
+        return setmealVO;
     }
 }
