@@ -9,4 +9,6 @@ import java.util.List;
 public interface SetmealDishMapper {
 
     void saveBatch(List<SetmealDish> setmealDishes);
+
+    List<SetmealDish> getBySetmealID(Long setmealId);
 }
