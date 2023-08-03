@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.user;
 
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("adminShopController")
-@RequestMapping("/admin/shop")
+@RestController("userShopController")
+@RequestMapping("/user/shop")
 @Slf4j
 @Api("ショップに関するインタフェース")
 public class ShopController {
@@ -18,15 +18,6 @@ public class ShopController {
 
     private final static String KEY = "SHOP_STATUS";
 
-    @PutMapping("/{status}")
-    @ApiOperation("営業状態を設定する")
-    public Result setStatus(@PathVariable Integer status){
-        log.info("営業状態を設定する{}",status);
-        redisTemplate.opsForValue().set(KEY,status);
-
-        return Result.success();
-
-    }
     @GetMapping("status")
     @ApiOperation("営業状態を取得する")
     public Result<Integer> setStatus(){

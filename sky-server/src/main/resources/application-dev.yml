@@ -8,6 +8,6 @@ sky:
     password: 1234
   redis:
     database: 10
-    host: locahost
+    host: localhost
     port: 6379
     password: 123456
