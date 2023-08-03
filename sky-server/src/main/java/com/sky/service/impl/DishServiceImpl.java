@@ -34,6 +34,8 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
 
 
     @Override
@@ -98,8 +100,23 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
     public void onOff(Integer status, Long id) {
         dishMapper.setStatusById(status, id);
+
+        //1.未販売状態にしたら、相応の定食も未販売にならなければ
+        if(status.equals(StatusConstant.DISABLE)) {
+            List<SetmealDish> setmealDishes = setmealDishMapper.getByDishId(id);
+            if (setmealDishes != null && setmealDishes.size() > 0){
+                for (SetmealDish setmealDish : setmealDishes) {
+                    Long setmealId = setmealDish.getSetmealId();
+                    setmealMapper.updateStatusById(StatusConstant.DISABLE,setmealId);
+                }
+            }
+        }
+
+
+        //2.トランザクションをオンにする
     }
 
     @Override
