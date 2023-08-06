@@ -22,4 +22,6 @@ public interface DishService {
     void delete(List<Long> ids);
 
     List<Dish> getByCategoryId(Long categoryId);
+
+    List<DishVO> list(Long categoryId);
 }
