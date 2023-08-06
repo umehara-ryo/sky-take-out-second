@@ -79,4 +79,10 @@
                  join category c on c.id = s.category_id
         where s.id = #{id}
     </select>
+    <select id="getByCategoryIdAndStatus" resultType="com.sky.entity.Setmeal">
+        select *
+        from setmeal
+        where status = #{status}
+          and category_id = #{categoryId}
+    </select>
 </mapper>

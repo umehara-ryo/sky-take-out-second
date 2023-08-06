@@ -15,6 +15,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.DishVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -160,5 +162,31 @@ public class SetmealServiceImpl implements SetmealService {
 
 
         //4.トランザクションをオンにする
+    }
+
+    @Override
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> list =  setmealMapper.getByCategoryIdAndStatus(setmeal);
+
+        return list;
+    }
+
+    @Override
+    public List<DishItemVO> getDishItemById(Long id) {
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealID(id);
+
+        List<DishItemVO> dishItemVOS = new ArrayList<>();
+        for (SetmealDish setmealDish : setmealDishes) {
+            DishItemVO dishItemVO = new DishItemVO();
+            dishItemVO.setCopies(setmealDish.getCopies());
+
+            Long dishId = setmealDish.getDishId();
+            DishVO dishVO = dishMapper.getById(dishId);
+            BeanUtils.copyProperties(dishVO,dishItemVO);
+            //dishVOの値を揃える
+            dishItemVOS.add(dishItemVO);
+
+        }
+        return dishItemVOS;
     }
 }

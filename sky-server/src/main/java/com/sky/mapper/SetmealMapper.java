@@ -32,4 +32,6 @@ public interface SetmealMapper {
     void update(Setmeal setmeal);
 
     void delete(List<Long> ids);
+
+    List<Setmeal> getByCategoryIdAndStatus(Setmeal setmeal);
 }
