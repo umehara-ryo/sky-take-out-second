@@ -36,6 +36,8 @@ logging:
 
 sky:
   jwt:
+    # 管理者側の配置情報
+
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: itcast
     # 设置jwt过期时间
@@ -43,6 +45,10 @@ sky:
     # 设置前端传递过来的令牌名称
     admin-token-name: token
 
+    # ユーザー側の配置情報
+    user-secret-key: itheima
+    user-ttl: 7200000
+    user-token-name: authentication
 
   alioss:
     endpoint: oss-cn-hangzhou.aliyuncs.com
@@ -50,3 +56,6 @@ sky:
     access-key-id: LTAI5tPoF3e8wiBRYMVMTusn
     access-key-secret: txQQQZ7YzIRmAqRTnEoNjpgWZSfmfF
 
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}

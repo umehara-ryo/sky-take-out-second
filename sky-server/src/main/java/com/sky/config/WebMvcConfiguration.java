@@ -32,7 +32,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
     @Autowired
-    private GlobalTimeInterceptor timeInterceptor;
+    private GlobalTimeInterceptor globalTimeInterceptor;
 
     /**
      * 注册自定义拦截器
@@ -46,7 +46,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/admin/employee/login");
 
         log.info("开始注册time拦截器...");
-        registry.addInterceptor(timeInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(globalTimeInterceptor).addPathPatterns("/**");
     }
 
     /**
