@@ -19,6 +19,7 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,7 +187,7 @@ public class DishServiceImpl implements DishService {
         return list;
     }
 
-    @Override
+
     public List<DishVO> list(Long categoryId) {
 
         //1.dishesを取り出す
