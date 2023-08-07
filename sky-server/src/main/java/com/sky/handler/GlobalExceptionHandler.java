@@ -18,7 +18,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler//指定要捕获的异常
+    @ExceptionHandler//キャッチする例外を指定します
     public Result exceptionHandler(BaseException ex){
         log.info("捕获全局异常{}",ex.getMessage());
         return  Result.error(ex.getMessage());

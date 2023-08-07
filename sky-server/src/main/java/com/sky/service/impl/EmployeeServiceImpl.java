@@ -92,9 +92,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         //ハードコーディング用いない　デフォルトのパスワードは123456
         employee.setPassword(password);
 
-        //TODO 后续AOP实现
+        //後でAOP実現
         //4.作成時間と更新時間、作成者と更新者をセットする
-        //TODO 後で、スレッドから　id　を取り出す
+        //後で、スレッドから　id　を取り出す
 
         Long currentId = BaseContext.getCurrentId();
 
