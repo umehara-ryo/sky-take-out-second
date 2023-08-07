@@ -38,14 +38,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //2.あるなら　数を１増やす 金額も変える
         if (shoppingCart != null) {
 
-            //数を１増やす
+
+            BigDecimal amount = shoppingCart.getAmount();
             Integer number = shoppingCart.getNumber();
+            BigDecimal price = amount.divide(BigDecimal.valueOf(number));
+
+            //数を１増やす
             number = number + 1;
             shoppingCart.setNumber(number);
 
             //金額を変える
-            BigDecimal amount = shoppingCart.getAmount();
-            amount = amount.multiply(BigDecimal.valueOf(number));
+
+            amount = price.multiply(BigDecimal.valueOf(number));
             shoppingCart.setAmount(amount);
 
 
@@ -112,5 +116,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public List<ShoppingCart> list() {
         return shoppingCartMapper.list();
+    }
+
+    @Override
+    public void sub(ShoppingCartDTO shoppingCartDTO) {
+        //numberの値をを確認 1なら消す　他の場合１を引く
+        ShoppingCart shoppingCart = shoppingCartMapper.getByDTO(shoppingCartDTO);
+        if(shoppingCart.getNumber() == 1){
+            shoppingCartMapper.deleteByDTO(shoppingCart);
+            return;
+        }
+
+        //単価を算出
+        Integer number = shoppingCart.getNumber();
+        BigDecimal price = shoppingCart.getAmount().divide(BigDecimal.valueOf(number));
+
+        //数を１減らす　金額算出
+        number = number -1 ;
+        BigDecimal amount = price.multiply(BigDecimal.valueOf(number));
+
+        shoppingCart.setNumber(number);
+        shoppingCart.setAmount(amount);
+
+        shoppingCartMapper.update(shoppingCart);
+
     }
 }

@@ -20,4 +20,5 @@ public interface ShoppingCartMapper {
 
     List<ShoppingCart> list();
 
+    void deleteByDTO(ShoppingCart shoppingCart);
 }
