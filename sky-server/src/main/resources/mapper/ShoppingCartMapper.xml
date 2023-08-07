@@ -30,4 +30,7 @@
 
         </where>
     </select>
+    <select id="list" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart
+    </select>
 </mapper>

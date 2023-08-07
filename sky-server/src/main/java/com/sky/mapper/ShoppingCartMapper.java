@@ -6,6 +6,8 @@ import com.sky.entity.ShoppingCart;
 import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface ShoppingCartMapper {
 
@@ -15,4 +17,7 @@ public interface ShoppingCartMapper {
     ShoppingCart getByDTO(ShoppingCartDTO shoppingCartDTO);
 
     void update(ShoppingCart shoppingCart);
+
+    List<ShoppingCart> list();
+
 }
