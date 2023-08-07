@@ -29,6 +29,9 @@
             </if>
         </where>
     </delete>
+    <delete id="deleteAll">
+        delete from shopping_cart
+    </delete>
     <select id="getByDTO" resultType="com.sky.entity.ShoppingCart">
         select *
         from shopping_cart

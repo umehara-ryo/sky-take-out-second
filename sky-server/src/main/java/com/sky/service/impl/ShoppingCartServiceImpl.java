@@ -141,4 +141,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartMapper.update(shoppingCart);
 
     }
+
+    @Override
+    public void clean() {
+        shoppingCartMapper.deleteAll();
+    }
 }
