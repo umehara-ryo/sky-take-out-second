@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -34,10 +35,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = shoppingCartMapper.getByDTO(shoppingCartDTO);
 
 
-        //2.あるなら　数を１増やす
+        //2.あるなら　数を１増やす 金額も変える
         if (shoppingCart != null) {
+
+            //数を１増やす
             Integer number = shoppingCart.getNumber();
-            shoppingCart.setNumber(number + 1);
+            number = number + 1;
+            shoppingCart.setNumber(number);
+
+            //金額を変える
+            BigDecimal amount = shoppingCart.getAmount();
+            amount = amount.multiply(BigDecimal.valueOf(number));
+            shoppingCart.setAmount(amount);
+
+
             shoppingCartMapper.update(shoppingCart);
             return;
         }
@@ -57,7 +68,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setUserId(BaseContext.getCurrentId());
 
 
-        if(dishId != null){
+        if (dishId != null) {
             //料理の基本情報を代入
             DishVO dishVO = dishMapper.getById(dishId);
             shoppingCart.setImage(dishVO.getImage());
@@ -73,7 +84,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart.setAmount(dishVO.getPrice());
 
 
-
             //挿入
             shoppingCartMapper.insert(shoppingCart);
 
@@ -81,7 +91,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         //5.setmealなら
 
-        if(setmealId != null){
+        if (setmealId != null) {
             //定食の基本情報を代入
             SetmealVO setmealVO = setmealMapper.getById(setmealId);
             shoppingCart.setImage(setmealVO.getImage());
@@ -95,9 +105,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCartMapper.insert(shoppingCart);
 
         }
-
-
-
 
 
     }

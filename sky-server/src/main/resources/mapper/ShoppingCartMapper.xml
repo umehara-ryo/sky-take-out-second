@@ -10,7 +10,8 @@
     </insert>
     <update id="update">
         update shopping_cart
-        set number = #{number}
+        set number = #{number},
+            amount = #{amount}
         where id = #{id}
     </update>
     <select id="getByDTO" resultType="com.sky.entity.ShoppingCart">
