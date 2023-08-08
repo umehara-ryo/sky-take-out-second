@@ -76,6 +76,15 @@ public class AddressBookController {
         return Result.success();
     }
 
+    @DeleteMapping
+    @ApiOperation("アドレスの削除")
+    public Result delete(Long id){
+        log.info("アドレスの削除{}",id);
+        addressBookService.delete(id);
+
+        return Result.success();
+    }
+
 
 
 

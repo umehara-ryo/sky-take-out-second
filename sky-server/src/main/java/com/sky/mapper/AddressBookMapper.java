@@ -19,4 +19,7 @@ public interface AddressBookMapper {
     void setDefault(Long id);
 
     void update(AddressBook addressBook);
+
+    void delete(Long id);
+
 }

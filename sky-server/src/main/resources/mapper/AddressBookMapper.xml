@@ -58,6 +58,11 @@
         </set>
         where id = #{id}
     </update>
+    <delete id="delete">
+        delete
+        from address_book
+        where id = #{id}
+    </delete>
     <select id="list" resultType="com.sky.entity.AddressBook">
         select *
         from address_book

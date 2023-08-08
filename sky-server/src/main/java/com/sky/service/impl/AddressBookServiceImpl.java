@@ -55,4 +55,10 @@ public class AddressBookServiceImpl implements AddressBookService {
         //アドレス情報を更新
         addressBookMapper.update(addressBook);
     }
+
+    @Override
+    public void delete(Long id) {
+        //アドレスの削除
+        addressBookMapper.delete(id);
+    }
 }
