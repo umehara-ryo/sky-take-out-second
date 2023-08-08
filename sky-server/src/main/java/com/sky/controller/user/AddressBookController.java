@@ -32,13 +32,23 @@ public class AddressBookController {
 
 
     @GetMapping("/list")
-    @ApiOperation("アドレス帳を検索")
+    @ApiOperation("アドレス帳で検索")
     public Result<List<AddressBook>> list(){
-        log.info("アドレス帳を検索");
+        log.info("アドレス帳で検索");
         List<AddressBook> list = addressBookService.list();
 
         return Result.success(list);
     }
+
+    @GetMapping("/default")
+    @ApiOperation("アドレス帳からデフォルトアドレスを検索")
+    public Result<AddressBook> getDefault(){
+        log.info("アドレス帳からデフォルトアドレスを検索");
+        AddressBook addressBook= addressBookService.getDefault();
+
+        return Result.success(addressBook);
+    }
+
 
 
 

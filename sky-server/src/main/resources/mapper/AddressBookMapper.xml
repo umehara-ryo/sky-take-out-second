@@ -14,4 +14,7 @@
     <select id="list" resultType="com.sky.entity.AddressBook">
         select * from address_book
     </select>
+    <select id="getDefault" resultType="com.sky.entity.AddressBook">
+        select * from address_book where is_default = 1
+    </select>
 </mapper>

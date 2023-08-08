@@ -9,4 +9,6 @@ public interface AddressBookService {
 
     List<AddressBook> list();
 
+    AddressBook getDefault();
+
 }

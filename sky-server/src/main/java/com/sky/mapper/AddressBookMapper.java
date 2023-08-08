@@ -11,4 +11,6 @@ public interface AddressBookMapper {
 
     List<AddressBook> list();
 
+    AddressBook getDefault();
+
 }

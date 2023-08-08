@@ -29,4 +29,9 @@ public class AddressBookServiceImpl implements AddressBookService {
     public List<AddressBook> list() {
         return  addressBookMapper.list();
     }
+
+    @Override
+    public AddressBook getDefault() {
+        return addressBookMapper.getDefault();
+    }
 }
