@@ -7,6 +7,8 @@ import com.sky.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AddressBookServiceImpl implements AddressBookService {
 
@@ -21,5 +23,10 @@ public class AddressBookServiceImpl implements AddressBookService {
         //アドレス帳表に挿入
         addressBookMapper.add(addressBook);
 
+    }
+
+    @Override
+    public List<AddressBook> list() {
+        return  addressBookMapper.list();
     }
 }

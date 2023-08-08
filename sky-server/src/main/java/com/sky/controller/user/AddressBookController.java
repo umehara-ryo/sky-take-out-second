@@ -8,9 +8,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/user/addressBook")
 @RestController
@@ -23,11 +23,21 @@ public class AddressBookController {
 
     @PostMapping
     @ApiOperation("アドレス帳に新規アドレス追加")
-    public Result add(@Autowired AddressBook addressBook){
+    public Result add(@RequestBody AddressBook addressBook){
         log.info("アドレス帳に新規アドレス追加{}",addressBook);
         addressBookService.add(addressBook);
 
         return Result.success();
+    }
+
+
+    @GetMapping("/list")
+    @ApiOperation("アドレス帳を検索")
+    public Result<List<AddressBook>> list(){
+        log.info("アドレス帳を検索");
+        List<AddressBook> list = addressBookService.list();
+
+        return Result.success(list);
     }
 
 

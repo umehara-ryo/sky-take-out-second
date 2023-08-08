@@ -11,4 +11,7 @@
                 #{provinceName},#{cityCode},#{cityName},#{districtCode},#{districtName},
                 #{detail},#{label},#{isDefault})
     </insert>
+    <select id="list" resultType="com.sky.entity.AddressBook">
+        select * from address_book
+    </select>
 </mapper>
