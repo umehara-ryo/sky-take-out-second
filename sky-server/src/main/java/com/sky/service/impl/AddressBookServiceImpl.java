@@ -49,4 +49,10 @@ public class AddressBookServiceImpl implements AddressBookService {
         addressBookMapper.setDefault(id);
 
     }
+
+    @Override
+    public void update(AddressBook addressBook) {
+        //アドレス情報を更新
+        addressBookMapper.update(addressBook);
+    }
 }

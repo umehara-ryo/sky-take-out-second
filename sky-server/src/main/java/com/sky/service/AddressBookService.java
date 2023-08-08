@@ -14,4 +14,6 @@ public interface AddressBookService {
     AddressBook getById(Long id);
 
     void setDefault(Long id);
+
+    void update(AddressBook addressBook);
 }

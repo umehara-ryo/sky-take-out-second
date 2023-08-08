@@ -60,13 +60,21 @@ public class AddressBookController {
 
     @PutMapping("/default")
     @ApiOperation("アドレスをデフォルトに設置する")
-    public Result setDefault(Long id){
+    public Result setDefault(@RequestBody Long id){
         log.info("アドレスをデフォルトに設置する{}",id);
         addressBookService.setDefault(id);
 
         return Result.success();
     }
 
+    @PutMapping
+    @ApiOperation("アドレス情報の変更")
+    public Result update(@RequestBody AddressBook addressBook){
+        log.info("アドレス情報の変更{}",addressBook);
+        addressBookService.update(addressBook);
+
+        return Result.success();
+    }
 
 
 
