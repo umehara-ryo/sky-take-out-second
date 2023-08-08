@@ -49,6 +49,15 @@ public class AddressBookController {
         return Result.success(addressBook);
     }
 
+    @GetMapping("/{id}")
+    @ApiOperation("アドレス帳からidで検索")
+    public Result<AddressBook> getById(@PathVariable Long id){
+        log.info("アドレス帳からidで検索{}",id);
+        AddressBook addressBook= addressBookService.getById(id);
+
+        return Result.success(addressBook);
+    }
+
 
 
 

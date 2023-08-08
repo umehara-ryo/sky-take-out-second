@@ -13,4 +13,5 @@ public interface AddressBookMapper {
 
     AddressBook getDefault();
 
+    AddressBook getById(Long id);
 }

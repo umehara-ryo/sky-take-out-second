@@ -11,4 +11,5 @@ public interface AddressBookService {
 
     AddressBook getDefault();
 
+    AddressBook getById(Long id);
 }
