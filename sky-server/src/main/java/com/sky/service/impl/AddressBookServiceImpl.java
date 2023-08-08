@@ -27,16 +27,26 @@ public class AddressBookServiceImpl implements AddressBookService {
 
     @Override
     public List<AddressBook> list() {
+        //アドレス帳から全てのデータを取り出す
         return  addressBookMapper.list();
     }
 
     @Override
     public AddressBook getDefault() {
+        //アドレス帳からデフォルトアドレスを取り出す
         return addressBookMapper.getDefault();
     }
 
     @Override
     public AddressBook getById(Long id) {
+        //idでアドレスを探し出す
         return addressBookMapper.getById(id);
+    }
+
+    @Override
+    public void setDefault(Long id) {
+        //idでdefaultに設定する
+        addressBookMapper.setDefault(id);
+
     }
 }

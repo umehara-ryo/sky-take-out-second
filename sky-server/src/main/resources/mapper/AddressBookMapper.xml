@@ -7,17 +7,27 @@
                                   province_code, province_name, city_code,
                                   city_name, district_code, district_name,
                                   detail, label, is_default)
-        values (#{userId},#{consignee},#{sex},#{phone},#{provinceCode},
-                #{provinceName},#{cityCode},#{cityName},#{districtCode},#{districtName},
-                #{detail},#{label},#{isDefault})
+        values (#{userId}, #{consignee}, #{sex}, #{phone}, #{provinceCode},
+                #{provinceName}, #{cityCode}, #{cityName}, #{districtCode}, #{districtName},
+                #{detail}, #{label}, #{isDefault})
     </insert>
+    <update id="setDefault">
+        update address_book
+        set is_default = 1
+        where id = #{id}
+    </update>
     <select id="list" resultType="com.sky.entity.AddressBook">
-        select * from address_book
+        select *
+        from address_book
     </select>
     <select id="getDefault" resultType="com.sky.entity.AddressBook">
-        select * from address_book where is_default = 1
+        select *
+        from address_book
+        where is_default = 1
     </select>
     <select id="getById" resultType="com.sky.entity.AddressBook">
-        select * from address_book where id = #{id}
+        select *
+        from address_book
+        where id = #{id}
     </select>
 </mapper>

@@ -1,8 +1,7 @@
 package com.sky.exception;
 
-/**
- * 账号不存在异常
- */
+//アカウントが存在しないという例外
+
 public class AccountNotFoundException extends BaseException {
 
     public AccountNotFoundException() {

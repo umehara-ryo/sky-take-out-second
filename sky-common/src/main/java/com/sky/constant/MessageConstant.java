@@ -1,8 +1,6 @@
 package com.sky.constant;
 
-/**
- * 信息提示常量类
- */
+//情報定数クラス
 public class MessageConstant {
 
     public static final String ALREADY_EXISTS_ERROR = "既に存在します";

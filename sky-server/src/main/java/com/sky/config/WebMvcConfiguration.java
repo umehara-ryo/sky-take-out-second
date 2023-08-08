@@ -43,7 +43,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param registry
      */
     protected void addInterceptors(InterceptorRegistry registry) {
-        log.info("开始注册jwtToken拦截器...");
+        log.info("jwtTokenインターセプターを登録している...");
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
@@ -52,7 +52,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .addPathPatterns("/user/**")
                 .excludePathPatterns("/user/user/**");
 
-        log.info("开始注册time拦截器...");
+        log.info("globalTimeインターセプターを登録している...");
         registry.addInterceptor(globalTimeInterceptor).addPathPatterns("/**");
     }
 
@@ -63,9 +63,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public Docket docket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("苍穹外卖项目接口文档")
+                .title("スカイ出前プロジェクトのインタフェースシート")
                 .version("2.0")
-                .description("苍穹外卖项目接口文档")
+                .description("スカイ出前プロジェクトのインタフェースシート")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)

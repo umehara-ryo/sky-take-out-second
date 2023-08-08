@@ -1,8 +1,8 @@
 package com.sky.exception;
 
-/**
- * 业务异常
- */
+
+//基本的な例外
+
 public class BaseException extends RuntimeException {
 
     public BaseException() {

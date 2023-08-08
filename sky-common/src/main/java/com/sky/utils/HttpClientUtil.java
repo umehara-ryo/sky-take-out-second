@@ -28,13 +28,13 @@ public class HttpClientUtil {
     static final  int TIMEOUT_MSEC = 5 * 1000;
 
     /**
-     * 发送GET方式请求
+     * GETのリクエストを送信する
      * @param url
      * @param paramMap
      * @return
      */
     public static String doGet(String url,Map<String,String> paramMap){
-        // 创建Httpclient对象
+        // Httpclientオブジェクトを作成
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         String result = "";
@@ -49,13 +49,13 @@ public class HttpClientUtil {
             }
             URI uri = builder.build();
 
-            //创建GET请求
+            //GETのリクエストを作成
             HttpGet httpGet = new HttpGet(uri);
 
-            //发送请求
+            //リクエストを送信する
             response = httpClient.execute(httpGet);
 
-            //判断响应状态
+            //レスポンスの状態を判明
             if(response.getStatusLine().getStatusCode() == 200){
                 result = EntityUtils.toString(response.getEntity(),"UTF-8");
             }
@@ -74,36 +74,36 @@ public class HttpClientUtil {
     }
 
     /**
-     * 发送POST方式请求
+     * POSTのリクエストを送信する
      * @param url
      * @param paramMap
      * @return
      * @throws IOException
      */
     public static String doPost(String url, Map<String, String> paramMap) throws IOException {
-        // 创建Httpclient对象
+        // Httpclientオブジェクトを作成
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
         String resultString = "";
 
         try {
-            // 创建Http Post请求
+            // HttpPostのリクエストを作成
             HttpPost httpPost = new HttpPost(url);
 
-            // 创建参数列表
+            // パラメーターのmapを作成する
             if (paramMap != null) {
                 List<NameValuePair> paramList = new ArrayList();
                 for (Map.Entry<String, String> param : paramMap.entrySet()) {
                     paramList.add(new BasicNameValuePair(param.getKey(), param.getValue()));
                 }
-                // 模拟表单
+                // フォームをシミュレートする
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
                 httpPost.setEntity(entity);
             }
 
             httpPost.setConfig(builderRequestConfig());
 
-            // 执行http请求
+            // httpのリクエストを実行する
             response = httpClient.execute(httpPost);
 
             resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -121,39 +121,39 @@ public class HttpClientUtil {
     }
 
     /**
-     * 发送POST方式请求
+     * POSTのリクエストを送信する
      * @param url
      * @param paramMap
      * @return
      * @throws IOException
      */
     public static String doPost4Json(String url, Map<String, String> paramMap) throws IOException {
-        // 创建Httpclient对象
+        // Httpclientオブジェクトを作成
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
         String resultString = "";
 
         try {
-            // 创建Http Post请求
+            // HttpPostのリクエストを作成
             HttpPost httpPost = new HttpPost(url);
 
             if (paramMap != null) {
-                //构造json格式数据
+                //JSON形式のデータを構築する
                 JSONObject jsonObject = new JSONObject();
                 for (Map.Entry<String, String> param : paramMap.entrySet()) {
                     jsonObject.put(param.getKey(),param.getValue());
                 }
                 StringEntity entity = new StringEntity(jsonObject.toString(),"utf-8");
-                //设置请求编码
+                //リクエストのエンコードを設定する
                 entity.setContentEncoding("utf-8");
-                //设置数据类型
+                //データ型を設定する
                 entity.setContentType("application/json");
                 httpPost.setEntity(entity);
             }
 
             httpPost.setConfig(builderRequestConfig());
 
-            // 执行http请求
+            // httpのリクエストを実行する
             response = httpClient.execute(httpPost);
 
             resultString = EntityUtils.toString(response.getEntity(), "UTF-8");

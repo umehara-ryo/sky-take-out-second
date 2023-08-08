@@ -1,5 +1,7 @@
 package com.sky.exception;
 
+//ユーザーはまだログインしていないという例外
+
 public class UserNotLoginException extends BaseException {
 
     public UserNotLoginException() {

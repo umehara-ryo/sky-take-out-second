@@ -1,8 +1,8 @@
 package com.sky.exception;
 
-/**
- * 套餐启用失败异常
- */
+
+// 定食の販売に失敗という例外
+
 public class SetmealEnableFailedException extends BaseException {
 
     public SetmealEnableFailedException(){}

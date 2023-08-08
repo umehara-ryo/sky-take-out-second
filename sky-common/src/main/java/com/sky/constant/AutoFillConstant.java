@@ -1,12 +1,11 @@
 package com.sky.constant;
 
-/**
- * 公共字段自动填充相关常量
- */
+
+//公開フィールドには、関連する定数が自動的に入力されます
 public class AutoFillConstant {
-    /**
-     * 实体类中的方法名称
-     */
+
+
+     //エンティティークラス内のメソッドの名前
     public static final String SET_CREATE_TIME = "setCreateTime";
     public static final String SET_UPDATE_TIME = "setUpdateTime";
     public static final String SET_CREATE_USER = "setCreateUser";

@@ -1,8 +1,7 @@
 package com.sky.exception;
 
-/**
- * 密码修改失败异常
- */
+//パスワードの変更に失敗の例外
+
 public class PasswordEditFailedException extends BaseException{
 
     public PasswordEditFailedException(String msg){

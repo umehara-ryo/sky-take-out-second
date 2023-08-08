@@ -1,13 +1,13 @@
 package com.sky.constant;
 
-/**
- * 状态常量，启用或者禁用
- */
+
+ //ステータス定数、有効または無効
+
 public class StatusConstant {
 
-    //启用
+    //有効
     public static final Integer ENABLE = 1;
 
-    //禁用
+    //無効
     public static final Integer DISABLE = 0;
 }

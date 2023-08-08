@@ -7,6 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface AddressBookMapper {
+
     void add(AddressBook addressBook);
 
     List<AddressBook> list();
@@ -14,4 +15,6 @@ public interface AddressBookMapper {
     AddressBook getDefault();
 
     AddressBook getById(Long id);
+
+    void setDefault(Long id);
 }

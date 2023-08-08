@@ -1,18 +1,16 @@
 package com.sky.enumeration;
 
-/**
- * 数据库操作类型
- */
+
+ //データベース操作の種類
+
 public enum OperationType {
 
-    /**
-     * 更新操作
-     */
+    //更新の操作
+
     UPDATE,
 
-    /**
-     * 插入操作
-     */
+    //挿入の操作
+
     INSERT
 
 }

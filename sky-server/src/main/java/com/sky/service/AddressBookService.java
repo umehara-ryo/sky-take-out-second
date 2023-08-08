@@ -12,4 +12,6 @@ public interface AddressBookService {
     AddressBook getDefault();
 
     AddressBook getById(Long id);
+
+    void setDefault(Long id);
 }

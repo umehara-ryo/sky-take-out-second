@@ -32,9 +32,11 @@ public class JacksonObjectMapper extends ObjectMapper {
     public JacksonObjectMapper() {
         super();
         //收到未知属性时不报异常
+        //不明な属性を受信しても例外は報告されない
         this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         //反序列化时，属性不存在的兼容处理
+        //逆シリアル化された場合、プロパティは存在しない時の互換性処理
         this.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         SimpleModule simpleModule = new SimpleModule()
@@ -46,6 +48,7 @@ public class JacksonObjectMapper extends ObjectMapper {
                 .addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)));
 
         //注册功能模块 例如，可以添加自定义序列化器和反序列化器
+        //機能モジュールを登録する たとえば、カスタム シリアライザーとデシリアライザーを追加できます
         this.registerModule(simpleModule);
     }
 }
