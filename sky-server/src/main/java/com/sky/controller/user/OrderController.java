@@ -4,6 +4,7 @@ import com.sky.dto.OrdersDTO;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
+import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +27,10 @@ public class OrderController {
 
     @PostMapping("/submit")
     @ApiOperation("お客様が注文する")
-    public Result<OrderVO> submit(OrdersDTO ordersDTO){
+    public Result<OrderSubmitVO> submit(OrdersDTO ordersDTO){
         log.info("お客様が注文する{}",ordersDTO);
-        OrderVO orderVO = orderService.submit(ordersDTO);
+        OrderSubmitVO orderSubmitVO = orderService.submit(ordersDTO);
 
-        return Result.success(orderVO);
+        return Result.success(orderSubmitVO);
     }
 }
