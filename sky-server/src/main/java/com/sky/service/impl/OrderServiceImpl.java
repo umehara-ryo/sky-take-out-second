@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
@@ -36,11 +37,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderSubmitVO submit(OrdersDTO ordersDTO) {
+    public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) {
+
 
         //1.オーダーオブジェクトを作成し、numberを作る、金額を算出
         Orders orders = new Orders();
-
+        BeanUtils.copyProperties(ordersSubmitDTO,orders);
         //現時点のミリ秒の値を取得
         Long currentTimeMillis = System.currentTimeMillis();
 
@@ -56,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
 
         //3.オーダー状態や支払い状態を設置する
         orders.setStatus(Orders.PENDING_PAYMENT);
+        orders.setPayStatus(Orders.UN_PAID);
 
         //4.表に挿入、idを返す
         orderMapper.save(orders);
@@ -76,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         orderDetailMapper.add(orderDetails);
 
         //6.ショッピングカートの内容を消す
+        shoppingCartService.clean();
 
 
         //7.orderVOオブジェクトを作成、オーダーナンバーを代入

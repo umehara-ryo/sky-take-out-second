@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
             return Result.error(msg);
         }
         else {
+            log.info(ex.getMessage());
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
     }
