@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,31 +17,17 @@ public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
-    private String username;
+    private Long empCd;
 
     private String name;
 
-    private String password;
+    private String nationalityCd;
 
-    private String phone;
-
-    private String sex;
-
-    private String idNumber;
-
-    private Integer status;
+    private String genderCd;
 
     //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") 返还给前端的数据
-    private LocalDateTime createTime;
+    private LocalDate birthday;
 
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 
 
 }
