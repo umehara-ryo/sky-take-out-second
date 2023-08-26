@@ -21,14 +21,23 @@ public class LoginController {
     private LoginService loginService;
 
     //従業員ログイン
+//    @ApiOperation("従業員ログイン")
+//    @GetMapping("/login")
+//    public Result<List<LoginUser>> login(LoginUser loginUser) {
+//        log.info("：{}", loginUser.getAccountId());
+//        List<LoginUser>  loginUserList = loginService.login(loginUser);
+//        //ユーザーネームとパスワードでidを獲得
+//        return Result.success(loginUserList);
+//    }
     @ApiOperation("従業員ログイン")
-    @GetMapping("/login")
-    public Result<List<LoginUser>> login(LoginUser loginUser) {
-        log.info("：{}", loginUser.getAccountId());
+    @PostMapping("/login")
+    public Result<List<LoginUser>> loginPost(@RequestBody LoginUser loginUser) {
+        log.info("post{}", loginUser.getAccountId());
         List<LoginUser>  loginUserList = loginService.login(loginUser);
         //ユーザーネームとパスワードでidを獲得
         return Result.success(loginUserList);
     }
+
 
 
 }
