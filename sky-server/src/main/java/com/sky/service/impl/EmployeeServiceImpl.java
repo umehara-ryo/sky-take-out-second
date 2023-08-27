@@ -1,9 +1,8 @@
 package com.sky.service.impl;
 
 import com.sky.entity.Employee;
-import com.sky.entity.LoginUser;
 import com.sky.mapper.EmployeeMapper;
-import com.sky.mapper.LoginMapper;
+import com.sky.service.EmployeeService;
 import com.sky.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,14 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LoginServiceImpl implements LoginService {
+public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private LoginMapper loginMapper;
+    private EmployeeMapper employeeMapper;
+
 
     @Override
-    public List<LoginUser> login(LoginUser loginUser) {
-        return loginMapper.login(loginUser);
+    public List<Employee> search() {
+        return employeeMapper.getAll();
     }
-
 }

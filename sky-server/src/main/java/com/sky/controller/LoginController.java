@@ -1,5 +1,6 @@
 package com.sky.controller;
 
+import com.sky.entity.Employee;
 import com.sky.entity.LoginUser;
 import com.sky.result.Result;
 import com.sky.service.LoginService;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Api(tags = "従業員に関するインタフェース")
-@RequestMapping("/employee")
+@Api(tags = "ログインに関するインタフェース")
+@RequestMapping
 @Slf4j
 @CrossOrigin
 public class LoginController {
@@ -30,13 +31,15 @@ public class LoginController {
 //        return Result.success(loginUserList);
 //    }
     @ApiOperation("従業員ログイン")
-    @PostMapping("/login")
+    @PostMapping("/employee/login")
     public Result<List<LoginUser>> loginPost(@RequestBody LoginUser loginUser) {
         log.info("post{}", loginUser.getAccountId());
         List<LoginUser>  loginUserList = loginService.login(loginUser);
         //ユーザーネームとパスワードでidを獲得
         return Result.success(loginUserList);
     }
+
+
 
 
 
