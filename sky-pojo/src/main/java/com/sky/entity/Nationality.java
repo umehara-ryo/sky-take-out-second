@@ -7,25 +7,19 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * 菜品口味
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DishFlavor implements Serializable {
+public class Nationality implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-    //菜品id
-    private Long dishId;
+    private String nationalityCd;
 
-    //口味名称
-    private String name;
+    private String nationalityName;
 
-    //口味数据list
-    private String value;
+
+
 
 }
