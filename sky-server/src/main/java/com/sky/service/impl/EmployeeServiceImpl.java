@@ -54,4 +54,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> find(String value) {
         return employeeMapper.findByValue(value);
     }
+
+    @Override
+    public void update(Employee employee) {
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public void delete(String empCd) {
+        employeeMapper.delete(empCd);
+    }
 }

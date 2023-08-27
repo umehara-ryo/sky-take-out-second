@@ -6,6 +6,29 @@
         insert into empdata (empCd,name, birthday, nationalityCd, genderCd)
         values (#{empCd},#{name},#{birthday},#{nationalityCd},#{genderCd})
     </insert>
+    <update id="update">
+        update empdata
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="nationalityCd != null">
+            nationalityCd = #{nationalityCd},
+            </if>
+            <if test="genderCd != null">
+                genderCd = #{genderCd},
+            </if>
+        </set>
+        where empCd = #{empCd}
+    </update>
+    <delete id="delete">
+        delete
+        from empdata
+        where empCd = #{empCd}
+    </delete>
 
     <select id="getAll" resultType="com.sky.entity.Employee">
         select empdata.*,g.genderName,n.nationalityName

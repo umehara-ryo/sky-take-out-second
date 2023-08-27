@@ -43,4 +43,20 @@ public class EmployeeController {
         List<Employee>  employeeList = employeeService.find(value);
         return Result.success(employeeList);
     }
+
+    @ApiOperation("情報変更")
+    @PutMapping("/update")
+    public Result update(@RequestBody Employee employee) {
+        log.info("情報変更{}",employee);
+        employeeService.update(employee);
+        return Result.success();
+    }
+
+    @ApiOperation("社員削除")
+    @DeleteMapping("/delete/{empCd}")
+    public Result delete(@PathVariable String empCd ) {
+        log.info("社員削除{}",empCd);
+        employeeService.delete(empCd);
+        return Result.success();
+    }
 }

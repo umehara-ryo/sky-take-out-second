@@ -15,4 +15,8 @@ public interface EmployeeMapper {
     void insert(Employee employee);
 
     List<Employee> findByValue(String value);
+
+    void update(Employee employee);
+
+    void delete(String empCd);
 }
