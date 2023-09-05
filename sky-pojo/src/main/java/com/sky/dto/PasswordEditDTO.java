@@ -7,13 +7,13 @@ import java.io.Serializable;
 @Data
 public class PasswordEditDTO implements Serializable {
 
-    //员工id
+    //従業員id
     private Long empId;
 
-    //旧密码
+    //前のパスワード
     private String oldPassword;
 
-    //新密码
+    //新しきパスワード
     private String newPassword;
 
 }

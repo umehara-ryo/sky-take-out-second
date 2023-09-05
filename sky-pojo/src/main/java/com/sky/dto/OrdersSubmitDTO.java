@@ -9,23 +9,23 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrdersSubmitDTO implements Serializable {
-    //地址簿id
+    //アドレス帳id
     private Long addressBookId;
-    //付款方式
+    //支払方法
     private int payMethod;
-    //备注
+    //コメント
     private String remark;
-    //预计送达时间
+    //配達予定時間
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime estimatedDeliveryTime;
-    //配送状态  1立即送出  0选择具体时间
+    //配達状況 1すぐに送信 0特定の時間を選択する
     private Integer deliveryStatus;
-    //餐具数量
+    //カトラリーの数
     private Integer tablewareNumber;
-    //餐具数量状态  1按餐量提供  0选择具体数量
+    //カトラリーの数状況  1食事のサイズで提供 0特定の数量を選択
     private Integer tablewareStatus;
-    //打包费
+    //パッケージ料
     private Integer packAmount;
-    //总金额
+    //総金額
     private BigDecimal amount;
 }

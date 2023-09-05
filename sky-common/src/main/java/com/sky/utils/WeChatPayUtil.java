@@ -35,35 +35,36 @@ import java.util.List;
 @Component
 public class WeChatPayUtil {
 
-    //微信支付下单接口地址
+    //WeChat支払いのインタフェース
     public static final String JSAPI = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
 
-    //申请退款接口地址
+    //返金手続きのインタフェース
     public static final String REFUNDS = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
 
     @Autowired
     private WeChatProperties weChatProperties;
 
     /**
-     * 获取调用微信接口的客户端工具对象
+     * WeChat インターフェイスを呼び出すクライアント ツール オブジェクトを取得
      *
      * @return
      */
     private CloseableHttpClient getClient() {
         PrivateKey merchantPrivateKey = null;
         try {
-            //merchantPrivateKey商户API私钥，如何加载商户API私钥请看常见问题
+            //merchantPrivateKeyマーチャント API プライベートキー
             merchantPrivateKey = PemUtil.loadPrivateKey(new FileInputStream(new File(weChatProperties.getPrivateKeyFilePath())));
-            //加载平台证书文件
+            //プラットフォーム証明書ファイルを読み込む
             X509Certificate x509Certificate = PemUtil.loadCertificate(new FileInputStream(new File(weChatProperties.getWeChatPayCertFilePath())));
-            //wechatPayCertificates微信支付平台证书列表。你也可以使用后面章节提到的“定时更新平台证书功能”，而不需要关心平台证书的来龙去脉
+            //wechatPayCertificates　WeChatPayプラットフォーム証明書のリスト
             List<X509Certificate> wechatPayCertificates = Arrays.asList(x509Certificate);
 
             WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
                     .withMerchant(weChatProperties.getMchid(), weChatProperties.getMchSerialNo(), merchantPrivateKey)
                     .withWechatPay(wechatPayCertificates);
 
-            // 通过WechatPayHttpClientBuilder构造的HttpClient，会自动的处理签名和验签
+            // WechatPayHttpClientBuilder型のHttpClientを通じて、
+            // サインとサインの検証は自動的に処理される
             CloseableHttpClient httpClient = builder.build();
             return httpClient;
         } catch (FileNotFoundException e) {
@@ -73,7 +74,7 @@ public class WeChatPayUtil {
     }
 
     /**
-     * 发送post方式请求
+     * postのリクエストを発信
      *
      * @param url
      * @param body
@@ -99,7 +100,7 @@ public class WeChatPayUtil {
     }
 
     /**
-     * 发送get方式请求
+     * getのリクエストを発信
      *
      * @param url
      * @return

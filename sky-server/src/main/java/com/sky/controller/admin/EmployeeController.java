@@ -42,9 +42,9 @@ public class EmployeeController {
         log.info("员工登录：{}", employeeLoginDTO);
 
         Employee employee = employeeService.login(employeeLoginDTO);
-        //以用户名密码来获取id
+        //ユーザーネームとパスワードでidを獲得
 
-        //登录成功后，生成jwt令牌
+        //ログインすると、jwtトークン
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
         String token = JwtUtil.createJWT(
