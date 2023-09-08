@@ -29,7 +29,7 @@
                 rejection_reason = #{rejectionReason},
             </if>
             <if test="deliveryStatus != null">
-            delivery_status = #{deliveryStatus},
+                delivery_status = #{deliveryStatus},
             </if>
             <if test="deliveryTime != null">
                 delivery_time = #{deliveryTime},
@@ -62,7 +62,7 @@
             <if test="beginTime != null">
                 and order_time &gt; #{beginTime}
             </if>
-             <if test="endTime != null">
+            <if test="endTime != null">
                 and order_time &lt; #{endTime}
             </if>
         </where>
@@ -72,5 +72,10 @@
         select *
         from orders
         where id = #{id}
+    </select>
+    <select id="countByStatus" resultType="java.lang.Integer">
+        select count(*)
+        from orders
+        where status = #{status}
     </select>
 </mapper>
