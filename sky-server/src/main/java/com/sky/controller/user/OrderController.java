@@ -22,8 +22,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private ShoppingCartService shoppingCartService;
 
     @PostMapping("/submit")
     @ApiOperation("お客様が注文する")

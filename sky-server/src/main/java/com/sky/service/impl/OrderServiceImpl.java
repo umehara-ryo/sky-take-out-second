@@ -4,20 +4,18 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
-import com.sky.dto.ShoppingCartDTO;
+import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.exception.OrderBusinessException;
-import com.sky.mapper.OrderDetailMapper;
-import com.sky.mapper.OrderMapper;
-import com.sky.mapper.ShoppingCartMapper;
+import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
+import com.sky.vo.DishVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailMapper orderDetailMapper;
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
+    @Autowired
+    private AddressBookMapper addressBookMapper;
 
 
     @Transactional
@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
 
                 //orderListにorderDetailを挿入
                 OrderVO orderVO = new OrderVO();
-                BeanUtils.copyProperties(orders,orderVO);
+                BeanUtils.copyProperties(orders, orderVO);
                 orderVO.setOrderDetailList(orderDetailList);
 
                 //listに挿入
@@ -152,18 +152,18 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(Long id) {
         //1.注文存在するかどうか検証
         OrderVO orderVO = orderMapper.getById(id);
-        if(orderVO == null){
-            throw  new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        if (orderVO == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
 
         //2.存在するなら、注文はすでに始まっているかどうか確認
-        if(orderVO.getStatus() > 2){
-            throw  new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        if (orderVO.getStatus() > 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
         //3. 注文状態を更新
         Orders orders = new Orders();
-        BeanUtils.copyProperties(orderVO,orders);
+        BeanUtils.copyProperties(orderVO, orders);
 
         //キャンセル原因を追加
         orders.setCancelReason("お客様にキャンセルされた");
@@ -192,7 +192,7 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailList.stream().map(orderDetail -> {
                     //orderDetailオブジェクトをshoppingCartオブジェクトにする
                     ShoppingCart shoppingCart = new ShoppingCart();
-                    BeanUtils.copyProperties(orderDetail,shoppingCart);
+                    BeanUtils.copyProperties(orderDetail, shoppingCart);
                     //ユーザーIDを代入
                     shoppingCart.setUserId(BaseContext.getCurrentId());
                     //作成時間を代入
@@ -202,5 +202,50 @@ public class OrderServiceImpl implements OrderService {
 
         //shoppingCart表に挿入
         shoppingCartMapper.insertBatch(shoppingCartList);
+    }
+
+    @Override
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+
+        //1.pageHelperを起動
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+
+        //2.dataを取得
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+
+
+        List<OrderVO> list = page.getResult().stream().map(x -> {
+            //orderDishsを取得
+            List<String> orderDishList= new ArrayList<>();
+
+            Long orderId = x.getId();
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orderId);
+            for (OrderDetail orderDetail : orderDetailList) {
+
+               String orderDish = orderDetail.getName() + "*" + orderDetail.getNumber() + ";";
+           orderDishList.add(orderDish);
+            }
+
+           String orderDishes  = String.join("",orderDishList);
+
+            //orderVOに値を代入
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(x, orderVO);
+            orderVO.setOrderDishes(orderDishes);
+
+            //アドレスを代入
+            AddressBook addressBook = addressBookMapper.getById(orderVO.getAddressBookId());
+            String address =
+//                      addressBook.getProvinceName()
+//                    + addressBook.getCityName()
+//                    + addressBook.getDistrictName()
+                     addressBook.getDetail();
+            orderVO.setAddress(address);
+
+            return orderVO;
+        }).collect(Collectors.toList());
+
+
+        return new PageResult(page.getTotal(), list);
     }
 }
