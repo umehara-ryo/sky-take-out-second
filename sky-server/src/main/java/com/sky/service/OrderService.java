@@ -12,4 +12,6 @@ public interface OrderService {
     PageResult getHistoryOrders(Integer page, Integer pageSize, Integer status);
 
     OrderVO getOrderDetail(Long id);
+
+    void cancelOrder(Long id);
 }

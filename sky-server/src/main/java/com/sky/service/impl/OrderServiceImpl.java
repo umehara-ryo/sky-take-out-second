@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
@@ -9,6 +10,7 @@ import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
+import com.sky.exception.OrderBusinessException;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
@@ -140,5 +142,34 @@ public class OrderServiceImpl implements OrderService {
         orderVO.setOrderDetailList(orderDetailList);
 
         return orderVO;
+    }
+
+    @Override
+    public void cancelOrder(Long id) {
+        //1.注文存在するかどうか検証
+        OrderVO orderVO = orderMapper.getById(id);
+        if(orderVO == null){
+            throw  new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        //2.存在するなら、注文はすでに始まっているかどうか確認
+        if(orderVO.getStatus() > 2){
+            throw  new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //3. 注文状態を更新
+        Orders orders = new Orders();
+        BeanUtils.copyProperties(orderVO,orders);
+
+        //キャンセル原因を追加
+        orders.setCancelReason("お客様にキャンセルされた");
+
+        //キャンセル時間を追加
+        orders.setCancelTime(LocalDateTime.now());
+
+        //キャンセル状態に設定
+        orders.setStatus(Orders.CANCELLED);
+
+        orderMapper.update(orders);
     }
 }
