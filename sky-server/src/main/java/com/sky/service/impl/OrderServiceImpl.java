@@ -42,6 +42,8 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartMapper shoppingCartMapper;
     @Autowired
     private AddressBookMapper addressBookMapper;
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Transactional
@@ -65,6 +67,15 @@ public class OrderServiceImpl implements OrderService {
         //3.オーダー状態や支払い状態を設置する
         orders.setStatus(Orders.PENDING_PAYMENT);
         orders.setPayStatus(Orders.UN_PAID);
+
+        //3.5電話番号、ユーザーネームとユーザーidを挿入
+        Long addressBookId = ordersSubmitDTO.getAddressBookId();
+        AddressBook addressBook = addressBookMapper.getById(addressBookId);
+        orders.setUserId(BaseContext.getCurrentId());
+        //orders.setAddress(addressBook.getDetail());
+        orders.setPhone(addressBook.getPhone());
+        orders.setUserName(addressBook.getConsignee());
+
 
         //4.表に挿入、idを返す
         orderMapper.save(orders);
