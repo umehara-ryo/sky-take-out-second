@@ -2,6 +2,7 @@ package com.sky.controller.user;
 
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
@@ -32,4 +33,15 @@ public class OrderController {
 
         return Result.success(orderSubmitVO);
     }
+
+    @GetMapping("/historyOrders")
+    @ApiOperation("注文履歴")
+    public Result<PageResult> getHistoryOrders(Integer page, Integer pageSize, Integer status){
+        log.info("注文履歴クエリ");
+        PageResult pageResult = orderService.getHistoryOrders(page,pageSize,status);
+        return Result.success(pageResult);
+
+    }
+
+
 }

@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface OrderDetailMapper {
     void add(List<OrderDetail> orderDetails);
+
+    List<OrderDetail> getByOrderId(Long orderId);
 }

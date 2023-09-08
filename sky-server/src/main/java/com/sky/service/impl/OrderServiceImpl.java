@@ -1,7 +1,10 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersDTO;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
@@ -9,6 +12,7 @@ import com.sky.entity.ShoppingCart;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.service.ShoppingCartService;
 import com.sky.vo.OrderSubmitVO;
@@ -34,23 +38,19 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailMapper orderDetailMapper;
 
 
-
     @Transactional
     @Override
     public OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO) {
 
-
         //1.オーダーオブジェクトを作成し、numberを作る、金額を算出
         Orders orders = new Orders();
-        BeanUtils.copyProperties(ordersSubmitDTO,orders);
+        BeanUtils.copyProperties(ordersSubmitDTO, orders);
         //現時点のミリ秒の値を取得
         Long currentTimeMillis = System.currentTimeMillis();
-
 
         //それをnumberとして設置する
         String number = currentTimeMillis.toString();
         orders.setNumber(number);
-
 
         //2.userIdと作成時間を代入
         orders.setUserId(BaseContext.getCurrentId());
@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (ShoppingCart shoppingCart : shoppingCarts) {
             OrderDetail orderDetail = new OrderDetail();
-            BeanUtils.copyProperties(shoppingCart,orderDetail);
+            BeanUtils.copyProperties(shoppingCart, orderDetail);
 
             //orderIdを挿入
             orderDetail.setOrderId(orders.getId());
@@ -91,5 +91,44 @@ public class OrderServiceImpl implements OrderService {
 
 
         return orderSubmitVO;
+    }
+
+    @Override
+    public PageResult getHistoryOrders(Integer page, Integer pageSize, Integer status) {
+        //1.pageHelperを起動
+        PageHelper.startPage(page, pageSize);
+        OrdersPageQueryDTO ordersPageQueryDTO = new OrdersPageQueryDTO();
+        ordersPageQueryDTO.setStatus(status);
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+
+        //2.dataを取得
+
+        //orderListを取得
+        List<OrderVO> list = new ArrayList<>();
+
+        Page<Orders> pages = orderMapper.pageQuery(ordersPageQueryDTO);
+        if (pages != null && pages.getTotal() > 0)
+            for (Orders orders : pages.getResult()) {
+                Long orderId = orders.getId();
+
+                //orderDetails取得
+                List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orderId);
+
+                //orderListにorderDetailを挿入
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders,orderVO);
+                orderVO.setOrderDetailList(orderDetailList);
+
+                list.add(orderVO);
+
+            }
+
+
+
+
+
+
+        //3.pageResultに代入
+        return new PageResult(pages.getTotal(), list);
     }
 }

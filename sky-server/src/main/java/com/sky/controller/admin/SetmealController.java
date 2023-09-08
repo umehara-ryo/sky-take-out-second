@@ -76,6 +76,7 @@ public class SetmealController {
     @DeleteMapping
     @ApiOperation("定食のバッチ削除")
     @CacheEvict(cacheNames = "setmealCache",allEntries = true)
+    //todo　リストを受ける時、@RequestParamが必要
     public Result delete( @RequestParam("ids") List<Long> ids){
         log.info("定食のバッチ削除{}",ids);
         setmealService.delete(ids);

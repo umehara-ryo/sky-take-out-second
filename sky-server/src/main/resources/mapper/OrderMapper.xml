@@ -8,9 +8,22 @@
                             amount, remark, phone, address, user_name, consignee, cancel_reason, rejection_reason,
                             cancel_time, estimated_delivery_time, delivery_status, delivery_time, pack_amount,
                             tableware_number, tableware_status)
-        values (#{number},#{status},#{userId},#{addressBookId},#{orderTime},#{checkoutTime},
-                #{payMethod},#{payStatus},#{amount},#{remark},#{phone},#{address},
-                #{userName},#{consignee},#{cancelReason},#{rejectionReason},#{cancelTime},#{estimatedDeliveryTime},
-                #{deliveryStatus},#{deliveryTime},#{packAmount},#{tablewareNumber},#{tablewareStatus})
+        values (#{number}, #{status}, #{userId}, #{addressBookId}, #{orderTime}, #{checkoutTime},
+                #{payMethod}, #{payStatus}, #{amount}, #{remark}, #{phone}, #{address},
+                #{userName}, #{consignee}, #{cancelReason}, #{rejectionReason}, #{cancelTime}, #{estimatedDeliveryTime},
+                #{deliveryStatus}, #{deliveryTime}, #{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
+    <select id="pageQuery" resultType="com.sky.entity.Orders">
+        select *
+        from orders
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            order by order_time desc
+        </where>
+    </select>
 </mapper>

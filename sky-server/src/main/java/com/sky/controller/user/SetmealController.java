@@ -18,19 +18,13 @@ import java.util.List;
 
 @RestController("userSetmealController")
 @RequestMapping("/user/setmeal")
-@Api(tags = "C端-套餐浏览接口")
+@Api(tags = "ユーザー側-定食インタフェース")
 public class SetmealController {
     @Autowired
     private SetmealService setmealService;
 
-    /**
-     * 条件查询
-     *
-     * @param categoryId
-     * @return
-     */
     @GetMapping("/list")
-    @ApiOperation("根据分类id查询套餐")
+    @ApiOperation("カテゴリーで定食をクエリ")
     @Cacheable(cacheNames = "setmealCache",key = "#categoryId")
     public Result<List<Setmeal>> list(Long categoryId) {
         Setmeal setmeal = new Setmeal();
@@ -41,14 +35,9 @@ public class SetmealController {
         return Result.success(list);
     }
 
-    /**
-     * 根据套餐id查询包含的菜品列表
-     *
-     * @param id
-     * @return
-     */
+
     @GetMapping("/dish/{id}")
-    @ApiOperation("根据套餐id查询包含的菜品列表")
+    @ApiOperation("定食idで含まれている料理のリストをクエリ")
     public Result<List<DishItemVO>> dishList(@PathVariable("id") Long id) {
         List<DishItemVO> list = setmealService.getDishItemById(id);
         return Result.success(list);
