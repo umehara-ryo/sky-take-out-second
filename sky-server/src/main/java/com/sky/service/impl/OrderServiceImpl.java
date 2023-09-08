@@ -7,6 +7,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
 
 
     @Transactional
@@ -171,5 +175,32 @@ public class OrderServiceImpl implements OrderService {
         orders.setStatus(Orders.CANCELLED);
 
         orderMapper.update(orders);
+    }
+
+    @Override
+    @Transactional
+    public void repetition(Long id) {
+        //1.注文情報を取得
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        //2.カートを空にする
+        shoppingCartService.clean();
+
+        //3.カートに挿入
+
+        List<ShoppingCart> shoppingCartList =
+                orderDetailList.stream().map(orderDetail -> {
+                    //orderDetailオブジェクトをshoppingCartオブジェクトにする
+                    ShoppingCart shoppingCart = new ShoppingCart();
+                    BeanUtils.copyProperties(orderDetail,shoppingCart);
+                    //ユーザーIDを代入
+                    shoppingCart.setUserId(BaseContext.getCurrentId());
+                    //作成時間を代入
+                    shoppingCart.setCreateTime(LocalDateTime.now());
+                    return shoppingCart;
+                }).collect(Collectors.toList());
+
+        //shoppingCart表に挿入
+        shoppingCartMapper.insertBatch(shoppingCartList);
     }
 }
