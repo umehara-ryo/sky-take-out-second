@@ -119,16 +119,26 @@ public class OrderServiceImpl implements OrderService {
                 BeanUtils.copyProperties(orders,orderVO);
                 orderVO.setOrderDetailList(orderDetailList);
 
+                //listに挿入
                 list.add(orderVO);
-
             }
-
-
-
-
 
 
         //3.pageResultに代入
         return new PageResult(pages.getTotal(), list);
+    }
+
+    @Override
+    public OrderVO getOrderDetail(Long id) {
+        //1.order表から調べる
+        OrderVO orderVO = orderMapper.getById(id);
+
+        //2.orderDetailList表から調べる
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        //3.orderVOにorderDetailに代入
+        orderVO.setOrderDetailList(orderDetailList);
+
+        return orderVO;
     }
 }

@@ -40,7 +40,14 @@ public class OrderController {
         log.info("注文履歴クエリ");
         PageResult pageResult = orderService.getHistoryOrders(page,pageSize,status);
         return Result.success(pageResult);
+    }
 
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("注文詳細情報")
+    public Result<OrderVO> getOrderDetail(@PathVariable Long id){
+        log.info("注文詳細情報{}",id);
+        OrderVO orderVO = orderService.getOrderDetail(id);
+        return Result.success(orderVO);
     }
 
 

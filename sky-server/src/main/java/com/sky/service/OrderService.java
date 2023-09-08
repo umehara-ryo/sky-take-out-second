@@ -10,4 +10,6 @@ public interface OrderService {
     OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO);
 
     PageResult getHistoryOrders(Integer page, Integer pageSize, Integer status);
+
+    OrderVO getOrderDetail(Long id);
 }

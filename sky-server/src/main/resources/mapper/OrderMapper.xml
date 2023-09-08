@@ -26,4 +26,9 @@
             order by order_time desc
         </where>
     </select>
+    <select id="getById" resultType="com.sky.vo.OrderVO">
+        select *
+        from orders
+        where id = #{id}
+    </select>
 </mapper>
