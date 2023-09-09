@@ -40,6 +40,9 @@
             <if test="estimatedDeliveryTime != null">
                 estimated_delivery_time = #{estimatedDeliveryTime},
             </if>
+            <if test="checkoutTime != null">
+                checkout_time = #{checkoutTime},
+            </if>
         </set>
         where id = #{id}
     </update>
