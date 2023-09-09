@@ -286,6 +286,8 @@ public class OrderServiceImpl implements OrderService {
         if (orderVO.getStatus() != 2) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
+        //3.予期配達完了時間を代入
+        orders.setEstimatedDeliveryTime(LocalDateTime.now().plusHours(1));
 
         // 受注状態を変更
         orders.setStatus(Orders.CONFIRMED);
@@ -311,4 +313,46 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
     }
+
+    @Override
+    @Transactional
+    public void cancel(Orders orders) {
+        //1.注文状態を確認
+        OrderVO orderVO = orderMapper.getById(orders.getId());
+        if (orderVO.getStatus() == Orders.CANCELLED ||orderVO.getStatus() == Orders.COMPLETED) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //2.受注状態を変更
+        orders.setStatus(Orders.CANCELLED);
+
+        //3.キャンセル時間を代入
+        orders.setCancelTime(LocalDateTime.now());
+
+        //4.受注待ち、配達待ち、配達中の場合は、返金手続きをする
+        //todo　返金手続きへ
+
+        //更新情報
+        orderMapper.update(orders);
+    }
+
+    @Override
+    public void delivery(Long id) {
+
+        //1.注文状態を確認
+        OrderVO orderVO = orderMapper.getById(id);
+        if (orderVO.getStatus() != Orders.CONFIRMED){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //2.配達中状態を設定
+        Orders orders = Orders.builder().id(id).status(Orders.DELIVERY_IN_PROGRESS).build();
+
+        orderMapper.update(orders);
+
+
+
+    }
+
+
 }

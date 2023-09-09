@@ -27,4 +27,8 @@ public interface OrderService {
     void confirm(Orders orders);
 
     void rejection(Orders orders);
+
+    void cancel(Orders orders);
+
+    void delivery(Long id);
 }

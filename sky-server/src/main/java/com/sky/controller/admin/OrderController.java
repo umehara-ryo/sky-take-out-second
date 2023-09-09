@@ -65,4 +65,20 @@ public class OrderController {
         return Result.success();
     }
 
+    @PutMapping("/cancel")
+    @ApiOperation(" 注文キャンセル")
+    public Result cancel(@RequestBody Orders orders) {
+        log.info("注文キャンセル{}", orders);
+        orderService.cancel(orders);
+        return Result.success();
+    }
+
+    @PutMapping("/delivery/{id}")
+    @ApiOperation("注文配達")
+    public Result delivery(@PathVariable Long id) {
+        log.info("注文配達{}", id);
+        orderService.delivery(id);
+        return Result.success();
+    }
+
 }
