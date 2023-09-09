@@ -38,7 +38,7 @@ public class SetmealController {
     @ApiOperation("定食のページクエリ")
     public Result<PageResult> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO){
         log.info("定食のページクエリ{}",setmealPageQueryDTO);
-       PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
+        PageResult pageResult = setmealService.pageQuery(setmealPageQueryDTO);
 
         return Result.success(pageResult);
     }

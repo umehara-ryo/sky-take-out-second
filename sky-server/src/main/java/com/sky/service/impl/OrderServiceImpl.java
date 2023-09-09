@@ -228,17 +228,17 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderVO> list = page.getResult().stream().map(x -> {
             //orderDishsを取得
-            List<String> orderDishList= new ArrayList<>();
+            List<String> orderDishList = new ArrayList<>();
 
             Long orderId = x.getId();
             List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orderId);
             for (OrderDetail orderDetail : orderDetailList) {
 
-               String orderDish = orderDetail.getName() + "*" + orderDetail.getNumber() + ";";
-           orderDishList.add(orderDish);
+                String orderDish = orderDetail.getName() + "*" + orderDetail.getNumber() + ";";
+                orderDishList.add(orderDish);
             }
 
-           String orderDishes  = String.join("",orderDishList);
+            String orderDishes = String.join("", orderDishList);
 
             //orderVOに値を代入
             OrderVO orderVO = new OrderVO();
@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
 //                      addressBook.getProvinceName()
 //                    + addressBook.getCityName()
 //                    + addressBook.getDistrictName()
-                     addressBook.getDetail();
+                    addressBook.getDetail();
             orderVO.setAddress(address);
 
             return orderVO;
@@ -274,5 +274,41 @@ public class OrderServiceImpl implements OrderService {
                 .confirmed(confirmed)
                 .deliveryInProgress(deliveryInProgress)
                 .build();
+    }
+
+    @Override
+    public void confirm(Orders orders) {
+        //1.受注時間を代入
+        orders.setCheckoutTime(LocalDateTime.now());
+
+        //2.注文状態を確認
+        OrderVO orderVO = orderMapper.getById(orders.getId());
+        if (orderVO.getStatus() != 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        // 受注状態を変更
+        orders.setStatus(Orders.CONFIRMED);
+        orders.setDeliveryStatus(Orders.CONFIRMED);
+        orderMapper.update(orders);
+    }
+
+    @Override
+    public void rejection(Orders orders) {
+
+        //1.注文状態を確認
+        OrderVO orderVO = orderMapper.getById(orders.getId());
+        if (orderVO.getStatus() != 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //2.受注状態を変更
+        orders.setStatus(Orders.CANCELLED);
+
+        //3.キャンセル原因や時間を代入
+        orders.setCancelReason("お店側に拒否されました");
+        orders.setCancelTime(LocalDateTime.now());
+
+        orderMapper.update(orders);
     }
 }
