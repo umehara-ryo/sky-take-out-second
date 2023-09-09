@@ -349,9 +349,6 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = Orders.builder().id(id).status(Orders.DELIVERY_IN_PROGRESS).build();
 
         orderMapper.update(orders);
-
-
-
     }
 
 
