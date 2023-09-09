@@ -39,5 +39,12 @@ public class OrderController {
         return Result.success(orderStatisticsVO);
     }
 
+    @GetMapping("/details/{id}")
+    @ApiOperation("注文詳細情報")
+    public Result<OrderVO> getOrderDetail(@PathVariable Long id){
+        log.info("注文詳細情報{}",id);
+        OrderVO orderVO = orderService.getOrderDetail(id);
+        return Result.success(orderVO);
+    }
 
 }
