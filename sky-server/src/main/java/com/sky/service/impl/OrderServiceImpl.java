@@ -338,7 +338,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void delivery(Long id) {
-
         //1.注文状態を確認
         OrderVO orderVO = orderMapper.getById(id);
         if (orderVO.getStatus() != Orders.CONFIRMED){
@@ -347,6 +346,21 @@ public class OrderServiceImpl implements OrderService {
 
         //2.配達中状態を設定
         Orders orders = Orders.builder().id(id).status(Orders.DELIVERY_IN_PROGRESS).build();
+
+        orderMapper.update(orders);
+    }
+
+    @Override
+    public void complete(Long id) {
+
+        //1.配達中であるかどうかを確認
+        OrderVO orderVO = orderMapper.getById(id);
+        if (orderVO.getStatus() != Orders.DELIVERY_IN_PROGRESS){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //2.完了済み状態を設定
+        Orders orders = Orders.builder().id(id).status(Orders.CANCELLED).build();
 
         orderMapper.update(orders);
     }
