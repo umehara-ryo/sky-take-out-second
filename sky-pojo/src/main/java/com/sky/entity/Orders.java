@@ -29,7 +29,7 @@ public class Orders implements Serializable {
     public static final Integer CANCELLED = 6;
 
     /*
-     * 支払い状態 0未支払い 支払い済み 2返金
+     * 支払い状態 0未支払い 1支払い済み 2返金
      */
     public static final Integer UN_PAID = 0;
     public static final Integer PAID = 1;
