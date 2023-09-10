@@ -16,16 +16,16 @@ import java.io.Serializable;
 @ApiModel(description = "従業員ログインする時戻るデータフォーマット")
 public class EmployeeLoginVO implements Serializable {
 
-    @ApiModelProperty("主键值")
+    @ApiModelProperty("主キー")
     private Long id;
 
-    @ApiModelProperty("用户名")
+    @ApiModelProperty("ユーザー名")
     private String userName;
 
-    @ApiModelProperty("姓名")
+    @ApiModelProperty("名前")
     private String name;
 
-    @ApiModelProperty("jwt令牌")
+    @ApiModelProperty("jwtトークン")
     private String token;
 
 }

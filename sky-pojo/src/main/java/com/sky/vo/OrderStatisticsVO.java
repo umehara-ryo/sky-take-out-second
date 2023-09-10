@@ -7,12 +7,12 @@ import java.io.Serializable;
 @Data
 @Builder
 public class OrderStatisticsVO implements Serializable {
-    //待接单数量
+    //受注待ち数
     private Integer toBeConfirmed;
 
-    //待派送数量
+    //発送待ち数量
     private Integer confirmed;
 
-    //派送中数量
+    //配達中数量
     private Integer deliveryInProgress;
 }

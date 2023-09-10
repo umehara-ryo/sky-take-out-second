@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * 菜品总览
+/*
+ *メニュー概要
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DishOverViewVO implements Serializable {
-    // 已启售数量
+    // 販売中数
     private Integer sold;
 
-    // 已停售数量
+    // 販売中止数
     private Integer discontinued;
 }
