@@ -19,24 +19,24 @@ public class User implements Serializable {
 
     private Long id;
 
-    //微信用户唯一标识
+    //微信ユーザーの唯一の識別
     private String openid;
 
-    //姓名
+    //名前
     private String name;
 
-    //手机号
+    //電話番号
     private String phone;
 
-    //性别 0 女 1 男
+    //性別 0 女 1 男
     private String sex;
 
-    //身份证号
+    //身分証明書番号
     private String idNumber;
 
-    //头像
+    //プロフィール写真
     private String avatar;
 
-    //注册时间
+    //登録時間
     private LocalDateTime createTime;
 }

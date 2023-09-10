@@ -21,22 +21,22 @@ public class Setmeal implements Serializable {
 
     private Long id;
 
-    //分类id
+    //カテゴリーid
     private Long categoryId;
 
-    //套餐名称
+    //定食名
     private String name;
 
-    //套餐价格
+    //定食価格
     private BigDecimal price;
 
-    //状态 0:停用 1:启用
+    //状態 0:無効 1:有効
     private Integer status;
 
-    //描述信息
+    //デスクリプション
     private String description;
 
-    //图片
+    //写真
     private String image;
 
     private LocalDateTime createTime;

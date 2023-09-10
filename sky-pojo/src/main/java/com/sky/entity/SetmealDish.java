@@ -21,18 +21,18 @@ public class SetmealDish implements Serializable {
 
     private Long id;
 
-    //套餐id
+    //定食id
     private Long setmealId;
 
-    //菜品id
+    //料理id
     private Long dishId;
 
-    //菜品名称 （冗余字段）
+    //料理名 （冗長フィールド）
     private String name;
 
-    //菜品原价
+    //料理価格
     private BigDecimal price;
 
-    //份数
+    //料理の数
     private Integer copies;
 }

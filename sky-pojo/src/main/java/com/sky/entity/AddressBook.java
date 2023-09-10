@@ -23,39 +23,39 @@ public class AddressBook implements Serializable {
     //ユーザーid
     private Long userId;
 
-    //收货人
+    //受荷主
     private String consignee;
 
-    //手机号
+    //電話番号
     private String phone;
 
-    //性别 0 女 1 男
+    //性別 0 女 1 男
     private String sex;
 
-    //省级区划编号
+    //都道府県区画番号
     private String provinceCode;
 
-    //省级名称
+    //都道府県名
     private String provinceName;
 
-    //市级区划编号
+    //市区画番号
     private String cityCode;
 
-    //市级名称
+    //市名
     private String cityName;
 
-    //区级区划编号
+    //区の区画番号
     private String districtCode;
 
-    //区级名称
+    //区名
     private String districtName;
 
-    //详细地址
+    //詳細アドレス
     private String detail;
 
-    //标签
+    //ラベル
     private String label;
 
-    //是否默认 0否 1是
+    //デフォルトか否か 0いえ 1はい
     private Integer isDefault;
 }
