@@ -26,8 +26,9 @@ public class OrderTask {
     /*
       タイムアウトしている注文を処理する
     */
-    @Scheduled(cron = "0 * * * * * ? ") //分ごとに触発
+    @Scheduled(cron = "0 * * * * ? ") //分ごとに触発
     public void processTimeout() {
+
         log.info("タイムアウトしている注文を処理する：{}", LocalDateTime.now());
 
         List<Orders> ordersList = orderMapper.getByStatusAndOrderTimeLT(Orders.PENDING_PAYMENT, LocalDateTime.now().plusMinutes(15));
@@ -44,8 +45,25 @@ public class OrderTask {
             }
 
         }
+    }
 
+    /*
+    ずっと配送中の注文を処理する
+    */
+    @Scheduled(cron = "0 0 4 * * ?") //日ごとに触発（毎日の夜の4時に）
+    public void processDeliveryOrder(){
 
+        log.info("ずっと配送中の注文を処理する：{}", LocalDateTime.now());
+
+        List<Orders> ordersList = orderMapper.getByStatusAndOrderTimeLT(Orders.DELIVERY_IN_PROGRESS, LocalDateTime.now().minusHours(4));
+
+        for (Orders orders : ordersList) {
+
+            //注文情報変更(完了済み)
+            orders.setStatus(Orders.COMPLETED);
+            orderMapper.update(orders);
+        }
 
     }
+
 }
