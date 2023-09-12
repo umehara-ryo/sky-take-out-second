@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
@@ -19,6 +20,7 @@ import com.sky.vo.DishVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private AddressBookMapper addressBookMapper;
     @Autowired
-    private UserMapper userMapper;
+    private WebSocketServer webSocketServer;
 
 
     @Transactional
@@ -319,7 +323,7 @@ public class OrderServiceImpl implements OrderService {
     public void cancel(Orders orders) {
         //1.注文状態を確認
         OrderVO orderVO = orderMapper.getById(orders.getId());
-        if (orderVO.getStatus() == Orders.CANCELLED ||orderVO.getStatus() == Orders.COMPLETED) {
+        if (orderVO.getStatus() == Orders.CANCELLED || orderVO.getStatus() == Orders.COMPLETED) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
@@ -340,7 +344,7 @@ public class OrderServiceImpl implements OrderService {
     public void delivery(Long id) {
         //1.注文状態を確認
         OrderVO orderVO = orderMapper.getById(id);
-        if (orderVO.getStatus() != Orders.CONFIRMED){
+        if (orderVO.getStatus() != Orders.CONFIRMED) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
@@ -355,7 +359,7 @@ public class OrderServiceImpl implements OrderService {
 
         //1.配達中であるかどうかを確認
         OrderVO orderVO = orderMapper.getById(id);
-        if (orderVO.getStatus() != Orders.DELIVERY_IN_PROGRESS){
+        if (orderVO.getStatus() != Orders.DELIVERY_IN_PROGRESS) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
 
@@ -363,6 +367,27 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = Orders.builder().id(id).status(Orders.CANCELLED).build();
 
         orderMapper.update(orders);
+    }
+
+    @Override
+    public void reminder(Long id) {
+
+
+        OrderVO orderVO = orderMapper.getById(id);
+        if (orderVO == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Map map = new HashMap();
+        map.put("type", 2);//2は注文催促
+        map.put("orderId", id);
+        map.put("content", "注文番号：" + orderVO.getNumber());
+
+        String json = JSON.toJSONString(map);
+
+
+        webSocketServer.sendToAllClient(json);
+
     }
 
 
