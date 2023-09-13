@@ -20,7 +20,7 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    //微信服务接口地址
+    //wechatサービスインタフェースのアドレス
     public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
 
     @Autowired
@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     private String getOpenid(UserLoginDTO userLoginDTO) {
-        //调用微信接口获得openid
+        //wechatインタフェースを呼び出し、openidを獲得
         Map<String, String> map = new HashMap<>();
         map.put("appid", weChatProperties.getAppid());
         map.put("secret", weChatProperties.getSecret());
         map.put("js_code", userLoginDTO.getCode());
         map.put("grant_type", "authorization_code");
         String json = HttpClientUtil.doGet(WX_LOGIN, map);
-        //判断openid是否存在,为空则表示登陆失败,抛出异常
+        //openidが存在するか判断し、NULLの場合はログイン失敗、例外をスローする
         JSONObject jsonObject = JSON.parseObject(json);
         String openid = jsonObject.getString("openid");
         return openid;
