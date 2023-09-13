@@ -83,7 +83,16 @@
     </select>
     <select id="getByStatusAndOrderTimeLT" resultType="com.sky.entity.Orders">
 
-        select * from orders where status = #{status} and order_time &lt; #{orderTime}
+        select *
+        from orders
+        where status = #{status}
+          and order_time &lt; #{orderTime}
 
+    </select>
+    <select id="getTurnOverByMap" resultType="java.lang.Double">
+        select sum(amount)
+        from orders
+        where order_time between #{begin} and #{end}
+          and status = #{status}
     </select>
 </mapper>
