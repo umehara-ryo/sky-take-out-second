@@ -45,6 +45,7 @@ public class ReportServiceImpl implements ReportService {
             map.put("end",endTime);
             map.put("status", Orders.COMPLETED);
             Double turnover = orderMapper.getTurnOverByMap(map);
+            turnover = turnover == null ? 0.0 : turnover;
 
             turnoverList.add(turnover);
             //日別で売上を算出
