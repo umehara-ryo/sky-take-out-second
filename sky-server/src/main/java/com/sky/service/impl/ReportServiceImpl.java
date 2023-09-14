@@ -1,12 +1,15 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
+import jdk.jshell.Snippet;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public TurnoverReportVO turnoverStatistics(LocalDate begin, LocalDate end) {
 
-        List<LocalDate> dateList =  getLocalDateList(begin, end);
+        List<LocalDate> dateList = getLocalDateList(begin, end);
 
         List<Double> turnoverList = new ArrayList<>();
         for (LocalDate date : dateList) {
@@ -72,7 +75,7 @@ public class ReportServiceImpl implements ReportService {
     public UserReportVO getUserReportVO(LocalDate begin, LocalDate end) {
 
         //localDateListを算出する
-        List<LocalDate> dateList =  getLocalDateList(begin, end);
+        List<LocalDate> dateList = getLocalDateList(begin, end);
 
         List<Integer> totalUserList = new ArrayList<>();
         List<Integer> newUserList = new ArrayList<>();
@@ -114,7 +117,6 @@ public class ReportServiceImpl implements ReportService {
         List<Integer> validOrderCountList = new ArrayList<>();
 
 
-
         for (LocalDate date : localDateList) {
             LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
             LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
@@ -127,7 +129,7 @@ public class ReportServiceImpl implements ReportService {
             Integer orderCount = orderMapper.countByMap(map);
 
             //日別有効注文数
-            map.put("status",Orders.COMPLETED);
+            map.put("status", Orders.COMPLETED);
             Integer validOrderCount = orderMapper.countByMap(map);
 
             orderCount = orderCount == null ? 0 : orderCount;
@@ -148,23 +150,45 @@ public class ReportServiceImpl implements ReportService {
         Integer totalOrderCount = orderMapper.countByMap(map);
 
         //期間中の有効注文数
-        map.put("status",Orders.COMPLETED);
+        map.put("status", Orders.COMPLETED);
         Integer validOrderCount = orderMapper.countByMap(map);
 
         totalOrderCount = totalOrderCount == null ? 0 : totalOrderCount;
         validOrderCount = validOrderCount == null ? 0 : validOrderCount;
 
         //注文完成率を算出する
-        Double orderCompletionRate = Double.valueOf(validOrderCount)/Double.valueOf(totalOrderCount);
+        Double orderCompletionRate = Double.valueOf(validOrderCount) / Double.valueOf(totalOrderCount);
 
 
         return OrderReportVO.builder()
-                .orderCountList(StringUtils.join(orderCountList,","))
-                .validOrderCountList(StringUtils.join(validOrderCountList,","))
+                .orderCountList(StringUtils.join(orderCountList, ","))
+                .validOrderCountList(StringUtils.join(validOrderCountList, ","))
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(validOrderCount)
                 .orderCompletionRate(orderCompletionRate)
-                .dateList(StringUtils.join(localDateList,","))
+                .dateList(StringUtils.join(localDateList, ","))
                 .build();
+    }
+
+    @Override
+    public SalesTop10ReportVO getSalesTop10ReportVO(LocalDate begin, LocalDate end) {
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        Integer status = Orders.COMPLETED;
+        List<GoodsSalesDTO> list = orderMapper.getSalesTop10(beginTime, endTime, status);
+
+        List<String> nameList = new ArrayList<>();
+        List<Integer> numberList = new ArrayList<>();
+
+        //商品名と販売量を分ける
+        for (GoodsSalesDTO goodsSalesDTO : list) {
+            nameList.add(goodsSalesDTO.getName());
+            numberList.add(goodsSalesDTO.getNumber());
+        }
+
+
+        return new SalesTop10ReportVO(StringUtils.join(nameList, ","),
+                StringUtils.join(numberList, ","));
     }
 }
