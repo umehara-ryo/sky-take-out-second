@@ -27,4 +27,6 @@ public interface OrderMapper {
 
 
     Double getTurnOverByMap(Map map);
+
+    Integer countByMap(Map map);
 }

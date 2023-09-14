@@ -4,6 +4,7 @@ import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import org.apache.commons.lang3.StringUtils;
@@ -82,11 +83,14 @@ public class ReportServiceImpl implements ReportService {
 
             Map map = new HashMap();
             map.put("end", endTime);
+            //総ユーザー数をクエリ
             Integer totalUser = userMapper.countByMap(map);
 
             map.put("begin", beginTime);
+            //新規ユーザー数をクエリ
             Integer newUser = userMapper.countByMap(map);
 
+            //nullの場合は、0を代入
             totalUser = totalUser == null ? 0 : totalUser;
             newUser = newUser == null ? 0 : newUser;
 
@@ -99,5 +103,68 @@ public class ReportServiceImpl implements ReportService {
                 StringUtils.join(dateList, ","),
                 StringUtils.join(totalUserList, ","),
                 StringUtils.join(newUserList, ","));
+    }
+
+    @Override
+    public OrderReportVO getOrderReportVO(LocalDate begin, LocalDate end) {
+        //localDateListを算出する
+        List<LocalDate> localDateList = getLocalDateList(begin, end);
+
+        List<Integer> orderCountList = new ArrayList<>();
+        List<Integer> validOrderCountList = new ArrayList<>();
+
+
+
+        for (LocalDate date : localDateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+
+            Map map = new HashMap();
+            map.put("end", endTime);
+            map.put("begin", beginTime);
+
+            //日別注文数
+            Integer orderCount = orderMapper.countByMap(map);
+
+            //日別有効注文数
+            map.put("status",Orders.COMPLETED);
+            Integer validOrderCount = orderMapper.countByMap(map);
+
+            orderCount = orderCount == null ? 0 : orderCount;
+            validOrderCount = validOrderCount == null ? 0 : validOrderCount;
+
+            orderCountList.add(orderCount);
+            validOrderCountList.add(validOrderCount);
+        }
+
+        //期間中の総注文数や有効注文を算出する
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        Map map = new HashMap();
+        map.put("end", endTime);
+        map.put("begin", beginTime);
+
+        //期間中の総注文数
+        Integer totalOrderCount = orderMapper.countByMap(map);
+
+        //期間中の有効注文数
+        map.put("status",Orders.COMPLETED);
+        Integer validOrderCount = orderMapper.countByMap(map);
+
+        totalOrderCount = totalOrderCount == null ? 0 : totalOrderCount;
+        validOrderCount = validOrderCount == null ? 0 : validOrderCount;
+
+        //注文完成率を算出する
+        Double orderCompletionRate = Double.valueOf(validOrderCount)/Double.valueOf(totalOrderCount);
+
+
+        return OrderReportVO.builder()
+                .orderCountList(StringUtils.join(orderCountList,","))
+                .validOrderCountList(StringUtils.join(validOrderCountList,","))
+                .totalOrderCount(totalOrderCount)
+                .validOrderCount(validOrderCount)
+                .orderCompletionRate(orderCompletionRate)
+                .dateList(StringUtils.join(localDateList,","))
+                .build();
     }
 }
