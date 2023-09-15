@@ -79,6 +79,6 @@
         where d.id = #{id};
     </select>
     <select id="countByStatus" resultType="java.lang.Integer">
-        select count(*) from setmeal where status = #{status}
+        select count(*) from dish where status = #{status}
     </select>
 </mapper>
