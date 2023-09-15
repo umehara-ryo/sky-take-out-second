@@ -1,7 +1,6 @@
 package com.sky.service.impl;
 
 import com.sky.entity.Orders;
-import com.sky.entity.Setmeal;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.SetmealMapper;
@@ -9,6 +8,7 @@ import com.sky.mapper.UserMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
 import com.sky.vo.DishOverViewVO;
+import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -111,5 +111,50 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
         return new DishOverViewVO(sold, discontinued);
 
+    }
+
+    @Override
+    public OrderOverViewVO getOverviewOrders() {
+
+
+        Map map = new HashMap();
+        map.put("begin", LocalDateTime.of(LocalDate.now(), LocalTime.MIN));
+        map.put("end", LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+
+        //本日注文数
+        Integer allOrders = orderMapper.countByMap(map);
+
+        //キャンセル注文数
+        map.put("status", Orders.CANCELLED);
+        Integer cancelledOrders = orderMapper.countByMap(map);
+
+        //完了注文数
+        map.put("status", Orders.CANCELLED);
+        Integer completedOrders = orderMapper.countByMap(map);
+
+        //発送待ち注文数
+        map.put("status", Orders.CONFIRMED);
+        Integer deliveredOrders = orderMapper.countByMap(map);
+
+        //受注待ち注文数
+        map.put("status", Orders.TO_BE_CONFIRMED);
+        Integer waitingOrders = orderMapper.countByMap(map);
+
+        //ヌルをゼロにする
+        allOrders = allOrders == null ? 0 : allOrders;
+        cancelledOrders = cancelledOrders == null ? 0 : cancelledOrders;
+        completedOrders = completedOrders == null ? 0 : completedOrders;
+        deliveredOrders = deliveredOrders == null ? 0 : deliveredOrders;
+        waitingOrders = waitingOrders == null ? 0 : waitingOrders;
+
+
+        return OrderOverViewVO
+                .builder()
+                .allOrders(allOrders)
+                .cancelledOrders(cancelledOrders)
+                .completedOrders(completedOrders)
+                .deliveredOrders(deliveredOrders)
+                .waitingOrders(waitingOrders)
+                .build();
     }
 }
