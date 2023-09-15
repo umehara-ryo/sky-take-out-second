@@ -85,4 +85,7 @@
         where status = #{status}
           and category_id = #{categoryId}
     </select>
+    <select id="countByStatus" resultType="java.lang.Integer">
+        select count(*) from setmeal where status = #{status}
+    </select>
 </mapper>
