@@ -1,10 +1,14 @@
 package com.sky.service.impl;
 
 import com.sky.entity.Orders;
+import com.sky.entity.Setmeal;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private UserMapper userMapper;
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     @Override
     public BusinessDataVO getBusinessData() {
@@ -64,5 +72,23 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 .unitPrice(unitPrice)
                 .validOrderCount(validOrderCount)
                 .build();
+    }
+
+    @Override
+    public SetmealOverViewVO getOverviewSetmeals() {
+
+
+        //販売中定食
+        Integer status = 1;
+        Integer sold = setmealMapper.countByStatus(status);
+
+        //販売中止定食
+        status = 0;
+        Integer discontinued = setmealMapper.countByStatus(status);
+
+        sold = sold == null ? 0 : sold;
+        discontinued = discontinued == null ? 0 : discontinued;
+
+        return new SetmealOverViewVO(sold,discontinued);
     }
 }
