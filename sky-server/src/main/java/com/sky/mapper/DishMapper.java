@@ -28,4 +28,6 @@ public interface DishMapper {
     void update(Dish dish);
 
     void deleteBatch(List<Long> ids);
+
+    Integer countByStatus(Integer status);
 }

@@ -78,4 +78,7 @@
                  join category c on c.id = d.category_id
         where d.id = #{id};
     </select>
+    <select id="countByStatus" resultType="java.lang.Integer">
+        select count(*) from setmeal where status = #{status}
+    </select>
 </mapper>

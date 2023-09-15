@@ -8,6 +8,7 @@ import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,9 +87,29 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         status = 0;
         Integer discontinued = setmealMapper.countByStatus(status);
 
+        //ヌルをゼロにする
         sold = sold == null ? 0 : sold;
         discontinued = discontinued == null ? 0 : discontinued;
 
-        return new SetmealOverViewVO(sold,discontinued);
+        return new SetmealOverViewVO(sold, discontinued);
+    }
+
+    @Override
+    public DishOverViewVO getOverviewDishes() {
+
+        //販売中料理
+        Integer status = 1;
+        Integer sold = dishMapper.countByStatus(status);
+
+        //販売中止料理
+        status = 0;
+        Integer discontinued = dishMapper.countByStatus(status);
+
+        //ヌルをゼロにする
+        sold = sold == null ? 0 : sold;
+        discontinued = discontinued == null ? 0 : discontinued;
+
+        return new DishOverViewVO(sold, discontinued);
+
     }
 }
